@@ -2,27 +2,19 @@
 import Profiler from './Profiler.vue'
 import Nav, { type LinkProp } from './Nav.vue'
 
-defineProps<{
-  links?: LinkProp[]
-  isCollapsed: boolean
-}>()
-
 const internalMenuLinks: LinkProp[] = [
   {
-    title: 'Home',
-    label: '128',
+    title: 'Dashboard',
     icon: 'i-carbon-cyclist',
     toPath: '/',
   },
   {
     title: 'Sessions',
-    label: '128',
     icon: 'i-carbon-prompt-session',
     toPath: '/sessions',
   },
   {
     title: 'Environments',
-    label: '9',
     icon: 'i-carbon-ibm-z-environments-dev-sec-ops',
     toPath: '/environments',
   },
@@ -30,15 +22,23 @@ const internalMenuLinks: LinkProp[] = [
 </script>
 
 <template>
-  <div class="h-full w-60 min-w-60 border-r">
+  <div class="h-full w-60 min-w-60 border-r flex flex-col">
     <div class="p-2 border-b">
       <Profiler />
     </div>
 
-    <Nav :is-collapsed :links="internalMenuLinks" />
+    <Nav :links="internalMenuLinks" />
 
-    <div class="p-2 border-t">
-      123
+    <div class="border-t p-2">
+      <Button size="xs">
+        Create
+      </Button>
     </div>
+
+    <ScrollArea class="flex-1 p-2">
+      <li v-for="item of 50" :key="item">
+        {{ item }}
+      </li>
+    </ScrollArea>
   </div>
 </template>

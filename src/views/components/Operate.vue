@@ -12,8 +12,8 @@ const METHODS = [
 </script>
 
 <template>
-  <div class="p-3 h-full">
-    <div class="flex gap-1 items-center">
+  <div class="p-2 h-full">
+    <div class="flex gap-1.5 items-center">
       <Select v-model="selectedMethod">
         <SelectTrigger aria-label="Select method" class="w-24 min-w-24">
           <SelectValue />
@@ -36,7 +36,13 @@ const METHODS = [
 
       <Input />
 
-      <Button>Send</Button>
+      <Button class="px-3">
+        Send
+      </Button>
+
+      <Button class="px-3" variant="outline">
+        Share
+      </Button>
     </div>
     Lorem ipsum dolor sit amet consectetur adipisicing elit. Id sunt maiores eos animi, consectetur placeat hic expedita explicabo nobis ipsa optio magnam voluptas impedit nulla asperiores non. Suscipit, temporibus id?
   </div>

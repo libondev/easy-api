@@ -8,8 +8,8 @@ import { ResizablePanel } from '@/components/ui/resizable'
 <template>
   <ResizablePanelGroup direction="horizontal">
     <ResizablePanel
-      :min-size="40"
-      :default-size="45"
+      :min-size="50"
+      :default-size="60"
     >
       <Operate />
     </ResizablePanel>
@@ -18,7 +18,7 @@ import { ResizablePanel } from '@/components/ui/resizable'
 
     <ResizablePanel
       :min-size="25"
-      :default-size="37"
+      :default-size="40"
     >
       <Preview />
     </ResizablePanel>
