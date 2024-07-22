@@ -3,7 +3,7 @@ import { createPinia } from 'pinia'
 import { RouterView } from 'vue-router'
 
 import router from './router'
-import { initToast } from '@/composables/use-toast'
+// import { initToast } from '@/composables/use-toast'
 
 import './styles'
 
@@ -14,4 +14,4 @@ app.use(router)
 
 app.mount('#app')
 
-initToast()
+// initToast()

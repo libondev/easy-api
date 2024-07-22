@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 @layer base {
-  div,p,button,input,textarea {
+  div, p, button, input, textarea {
     @apply border-border;
   }
 
@@ -43,7 +43,7 @@
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 255 85% 5%;
     --foreground: 210 40% 98%;
 
     --muted: 217.2 32.6% 17.5%;
