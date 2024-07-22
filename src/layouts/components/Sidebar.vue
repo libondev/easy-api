@@ -1,24 +1,7 @@
 <script lang="ts" setup>
 import Profiler from './Profiler.vue'
-import Nav, { type LinkProp } from './Nav.vue'
-
-const internalMenuLinks: LinkProp[] = [
-  {
-    title: 'Dashboard',
-    icon: 'i-carbon-cyclist',
-    toPath: '/',
-  },
-  {
-    title: 'Sessions',
-    icon: 'i-carbon-prompt-session',
-    toPath: '/sessions',
-  },
-  {
-    title: 'Environments',
-    icon: 'i-carbon-ibm-z-environments-dev-sec-ops',
-    toPath: '/environments',
-  },
-]
+import Nav from './Nav.vue'
+import { INTERNAL_MENU_LINK } from '@/constants/layout'
 </script>
 
 <template>
@@ -27,7 +10,7 @@ const internalMenuLinks: LinkProp[] = [
       <Profiler />
     </div>
 
-    <Nav :links="internalMenuLinks" />
+    <Nav :links="INTERNAL_MENU_LINK" />
 
     <div class="border-t p-2">
       <Button size="xs">

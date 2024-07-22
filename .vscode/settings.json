@@ -58,9 +58,10 @@
     "lightningcss",
     "pinia",
     "sonner",
+    "localforage",
     "tailwindcss",
     "tanstack",
     "unplugin",
-    "vaul"
+    "vaul",
   ]
 }

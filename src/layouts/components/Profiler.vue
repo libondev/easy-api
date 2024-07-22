@@ -11,7 +11,7 @@ const _profiles = [
 </script>
 
 <template>
-  <Select v-model="selectedProfile">
+  <Select v-model="selectedProfile" name="selected-profile">
     <SelectTrigger aria-label="Select profile">
       <SelectValue placeholder="Select an profile" />
     </SelectTrigger>

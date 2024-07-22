@@ -1,25 +1,17 @@
 <script lang="ts" setup>
 import { cn } from '@/utils/cls.ts'
+import type { LinkProp } from '@/constants/layout'
 import { buttonVariants } from '@/components/ui/button'
 
-export interface LinkProp {
-  icon: string
-  title: string
-  label?: string
-  toPath: string
-}
-
-interface NavProps {
+defineProps<{
   links: LinkProp[]
-}
-
-defineProps<NavProps>()
+}>()
 </script>
 
 <template>
   <div class="group flex flex-col gap-4 py-2 data-[collapsed=true]:py-2">
     <nav class="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
-      <template v-for="(link, index) of links" :key="`1-${index}`">
+      <template v-for="link of links" :key="link.toPath">
         <RouterLink
           :to="link.toPath"
           class="!justify-start"
