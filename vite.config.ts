@@ -15,7 +15,6 @@ export default defineConfig(({ mode }) => ({
   base: './',
 
   build: {
-    cssMinify: 'lightningcss',
     reportCompressedSize: false,
     rollupOptions: {
       output: {

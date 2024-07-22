@@ -1,4 +1,4 @@
-import { shallowRef } from 'vue'
+import { onBeforeUnmount, shallowRef } from 'vue'
 
 interface Options {
   /**
@@ -43,7 +43,11 @@ export function useCountdown({
     timeoutId = window.setTimeout(() => {
       remainder.value -= interval
 
-      remainder.value ? start(false) : onFinished()
+      if (remainder.value) {
+        start(false)
+      } else {
+        onFinished()
+      }
     }, interval * 1000)
   }
 
@@ -52,7 +56,9 @@ export function useCountdown({
     remainder.value = times
   }
 
-  immediate && start()
+  if (immediate) {
+    start()
+  }
 
   onBeforeUnmount(() => {
     pause()

@@ -7,7 +7,8 @@ export function parseJson<T>(
       throw new Error('json is empty')
 
     return JSON.parse(json) as T
-  } catch (err) {
+    // eslint-disable-next-line unused-imports/no-unused-vars
+  } catch (_e) {
     return typeof defaultValueOrParser === 'function'
       ? defaultValueOrParser(json)
       : defaultValueOrParser
