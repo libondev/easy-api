@@ -93,7 +93,7 @@ export default {
   plugins: [
     animate,
     iconsPlugin({
-      collections: getIconCollections(['ph', 'carbon', 'solar']),
+      collections: getIconCollections(['ph', 'mdi', 'carbon', 'solar']),
     }),
   ],
 }

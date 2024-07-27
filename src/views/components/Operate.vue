@@ -5,9 +5,11 @@ import type { RequestDetail, RequestResult, RequestStatus } from '@/types/reques
 const requestPending = defineModel<boolean>('pending', { default: false })
 const requestStatus = defineModel('status', { default: {} as RequestStatus })
 const requestDetail = defineModel('detail', { default: {} as RequestDetail })
-const requestResult = defineModel('result', { default: {} as RequestResult })
+const requestResult = defineModel<RequestResult>('result')
 
 const selectedMethod = shallowRef('get')
+
+let _abortController: AbortController
 
 let startAt: number
 function onSendClick() {
@@ -17,9 +19,12 @@ function onSendClick() {
 
   startAt = Date.now()
   requestPending.value = true
+  _abortController = new AbortController()
+
   fetch(requestDetail.value.url, {
     mode: 'cors',
     cache: 'no-cache',
+    signal: _abortController.signal,
     credentials: 'include',
     referrerPolicy: 'no-referrer-when-downgrade',
     method: requestDetail.value?.method ?? 'GET',
@@ -31,7 +36,13 @@ function onSendClick() {
         durations: Date.now() - startAt,
       }
 
-      requestResult.value = await res.json()
+      let response = await res.text()
+
+      if (typeof response !== 'string') {
+        response = JSON.stringify(response)
+      }
+
+      requestResult.value = response
     })
     .catch((err) => {
       requestStatus.value = {
@@ -44,6 +55,12 @@ function onSendClick() {
     .finally(() => {
       requestPending.value = false
     })
+}
+
+// Cancel requesting
+function onCancelClick() {
+  _abortController?.abort()
+  requestPending.value = false
 }
 
 function onShareClick() { }
@@ -71,9 +88,16 @@ function onShareClick() { }
       </SelectContent>
     </Select>
 
-    <Input v-model.trim="requestDetail.url" name="request-address" @keydown.enter="onSendClick" />
+    <div class="w-full relative">
+      <Input v-model.trim="requestDetail.url" name="request-address" class="pr-10" @keydown.enter="onSendClick" />
+      <!-- TODO: support keyboard access -->
+      <kbd class="inline-flex items-center pointer-events-none h-5 select-none items-center gap-1 rounded border border-border bg-muted font-sans font-medium min-h-5 text-[11px] h-5 px-1 pointer-events-none absolute right-[0.3rem] top-[0.3rem] hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex"><span class="text-xs">⌘</span>K</kbd>
+    </div>
 
-    <Button class="px-3" :disabled="requestPending" @click="onSendClick">
+    <Button v-show="requestPending" variant="destructive" class="w-[72px] min-w-[72px]" @click="onCancelClick">
+      Cancel
+    </Button>
+    <Button v-show="!requestPending" class="w-[72px] min-w-[72px]" @click="onSendClick">
       Send
     </Button>
 

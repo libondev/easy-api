@@ -11,4 +11,4 @@ export interface RequestStatus {
   durations: number
 }
 
-export type RequestResult = unknown
+export type RequestResult = any

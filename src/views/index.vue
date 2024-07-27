@@ -11,12 +11,12 @@ const requestDetail = ref({
   method: 'GET',
 })
 const requestStatus = shallowRef({ code: 200, durations: 5 } as RequestStatus)
-const requestResult = shallowRef({
+const requestResult = shallowRef(`{
   userId: 1,
   id: 1,
   title: 'delectus aut autem',
   completed: false,
-})
+}`)
 </script>
 
 <template>
