@@ -12,7 +12,7 @@ const _profiles = [
 
 <template>
   <Select v-model="selectedProfile" name="selected-profile">
-    <SelectTrigger aria-label="Select profile">
+    <SelectTrigger aria-label="Select profile" class="w-52 min-w-52">
       <SelectValue placeholder="Select an profile" />
     </SelectTrigger>
 

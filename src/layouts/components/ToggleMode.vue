@@ -8,7 +8,7 @@ const toggleDark = useToggle(isDark)
 </script>
 
 <template>
-  <button class="cursor-pointer p-2 rounded hover:bg-accent text-xl hover:text-foreground/80 text-foreground/60" @click="toggleDark()">
-    <i class="block pointer-events-none" :class="isDark ? 'i-solar-moon-bold' : 'i-solar-sun-bold'" />
-  </button>
+  <Button variant="ghost" size="icon" @click="toggleDark()">
+    <i class="block pointer-events-none text-lg" :class="isDark ? 'i-solar-moon-bold' : 'i-solar-sun-bold'" />
+  </Button>
 </template>

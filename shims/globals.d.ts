@@ -13,6 +13,12 @@ declare global {
     }
   }
 
+  interface Window {
+    scheduler: {
+      postTask: (cb: () => void, options: any) => Promise<void>
+    }
+  }
+
   interface MatcherResult<Value, Input = unknown> {
     input: Input
     state: {

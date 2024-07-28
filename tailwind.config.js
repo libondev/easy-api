@@ -23,6 +23,10 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        sans: 'Geist,Inter,Helvetica, Arial, sans-serif',
+        mono: '"JetBrains Mono",Hack,Menlo,"Courier New",Courier,monospace',
+      },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',

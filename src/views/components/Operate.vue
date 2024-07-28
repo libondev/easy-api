@@ -1,12 +1,15 @@
 <script lang="ts" setup>
-import { METHODS } from '@/constants/request'
+import { DEFAULT_REQUEST_CONFIG_INJECTION_KEY, METHODS } from '@/constants/request'
 import type { RequestDetail, RequestResult, RequestStatus } from '@/types/request'
+
+const defaultConfig = inject(DEFAULT_REQUEST_CONFIG_INJECTION_KEY)!
 
 const requestPending = defineModel<boolean>('pending', { default: false })
 const requestStatus = defineModel('status', { default: {} as RequestStatus })
 const requestDetail = defineModel('detail', { default: {} as RequestDetail })
 const requestResult = defineModel<RequestResult>('result')
 
+const inputRef = shallowRef<HTMLInputElement>()
 const selectedMethod = shallowRef('get')
 
 let _abortController: AbortController
@@ -22,14 +25,11 @@ function onSendClick() {
   _abortController = new AbortController()
 
   fetch(requestDetail.value.url, {
-    mode: 'cors',
-    cache: 'no-cache',
+    ...defaultConfig.value,
     signal: _abortController.signal,
-    credentials: 'include',
-    referrerPolicy: 'no-referrer-when-downgrade',
-    method: requestDetail.value?.method ?? 'GET',
-    headers: requestDetail.value?.headers ?? {},
-  })
+    method: requestDetail.value?.method,
+    headers: requestDetail.value?.headers,
+  } as RequestInit)
     .then(async (res) => {
       requestStatus.value = {
         code: res.status,
@@ -64,12 +64,16 @@ function onCancelClick() {
 }
 
 function onShareClick() { }
+
+onBeforeUnmount(() => {
+  onCancelClick()
+})
 </script>
 
 <template>
   <div class="p-2 flex gap-1.5 items-center border-b">
     <Select v-model="requestDetail.method" name="request-method">
-      <SelectTrigger aria-label="Select method" class="w-24 min-w-24">
+      <SelectTrigger aria-label="Select method" class="w-24 min-w-24" :disabled="requestPending">
         <SelectValue placeholder="Select an method" />
       </SelectTrigger>
 
@@ -79,7 +83,7 @@ function onShareClick() { }
     </Select>
 
     <Select v-model="selectedMethod" name="request-variable">
-      <SelectTrigger aria-label="Select variable" class="w-24 min-w-24">
+      <SelectTrigger aria-label="Select variable" class="w-24 min-w-24" :disabled="requestPending">
         <SelectValue placeholder="Select an Variable" />
       </SelectTrigger>
 
@@ -89,19 +93,39 @@ function onShareClick() { }
     </Select>
 
     <div class="w-full relative">
-      <Input v-model.trim="requestDetail.url" name="request-address" class="pr-10" @keydown.enter="onSendClick" />
-      <!-- TODO: support keyboard access -->
-      <kbd class="inline-flex items-center pointer-events-none h-5 select-none items-center gap-1 rounded border border-border bg-muted font-sans font-medium min-h-5 text-[11px] h-5 px-1 pointer-events-none absolute right-[0.3rem] top-[0.3rem] hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex"><span class="text-xs">⌘</span>K</kbd>
+      <Input
+        ref="inputRef"
+        v-model.trim="requestDetail.url"
+        :disabled="requestPending"
+        name="request-address"
+        @keydown.enter="onSendClick"
+      />
     </div>
 
-    <Button v-show="requestPending" variant="destructive" class="w-[72px] min-w-[72px]" @click="onCancelClick">
+    <Button
+      v-show="requestPending"
+      variant="destructive"
+      class="w-[72px] min-w-[72px]"
+      title="Cancel this pending request"
+      @click="onCancelClick"
+    >
       Cancel
     </Button>
-    <Button v-show="!requestPending" class="w-[72px] min-w-[72px]" @click="onSendClick">
+    <Button
+      v-show="!requestPending"
+      class="w-[72px] min-w-[72px]"
+      title="Send this request"
+      @click="onSendClick"
+    >
       Send
     </Button>
 
-    <Button class="px-3" variant="outline" @click="onShareClick">
+    <Button
+      class="px-3"
+      variant="outline"
+      title="Generate links to share with others"
+      @click="onShareClick"
+    >
       Share
     </Button>
   </div>
