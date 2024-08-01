@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 const menus = [
-  { text: 'Request Options', path: 'request' },
+  { text: 'Request', path: 'request' },
   { text: 'Sessions', path: 'sessions' },
   { text: 'Environments', path: 'environments' },
 ]
@@ -18,7 +18,7 @@ const menus = [
     </div>
 
     <div class="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
-      <aside class="-mx-4 lg:w-1/5">
+      <aside class="lg:w-1/5">
         <nav class="flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1">
           <RouterLink
             v-for="menu of menus"

@@ -1,19 +1,56 @@
 <script lang="ts" setup>
-import { INTERNAL_MENU_LINK as links } from '@/constants/layout'
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarTrigger,
+} from '@/components/ui/menubar'
+
+const menus = [
+  {
+    label: 'Settings',
+    children: [
+      {
+        label: 'Request',
+        icon: 'i-carbon-http',
+        link: '/settings/request',
+      },
+      {
+        label: 'Sessions',
+        icon: 'i-carbon-prompt-session',
+        link: '/settings/sessions',
+      },
+      {
+        label: 'Environments',
+        icon: 'i-carbon-ibm-z-environments-dev-sec-ops',
+        link: '/settings/environments',
+      },
+    ],
+  },
+]
 </script>
 
 <template>
-  <nav class="flex gap-1.5 px-2 select-none">
-    <RouterLink
-      v-for="link of links"
-      :key="link.toPath"
-      :to="link.toPath"
-      :title="link.title"
-      class="flex items-center h-8 px-2 rounded-md text-sm hover:bg-accent hover:text-accent-foreground"
-      active-class="pointer-events-none bg-primary text-primary-foreground"
-    >
-      <i class="size-4 min-w-4" :class="link.icon" />
-      <span class="ml-1.5 hidden md:block"> {{ link.title }}</span>
-    </RouterLink>
-  </nav>
+  <RouterLink
+    to="/"
+    class="ml-1.5 py-1 px-3 rounded-sm select-none text-sm font-medium cursor-default hover:bg-accent hover:text-accent-foreground"
+  >
+    Dashboard
+  </RouterLink>
+
+  <Menubar class="rounded-none border-none shadow-none px-2 h-8 pl-1.5">
+    <MenubarMenu v-for="menu of menus" :key="menu.label">
+      <MenubarTrigger>{{ menu.label }}</MenubarTrigger>
+      <MenubarContent>
+        <MenubarItem v-for="item of menu.children" :key="item.label" as-child>
+          <RouterLink :to="item.link" class="flex justify-between">
+            <span>{{ item.label }}</span>
+
+            <i v-if="item.icon" class="size-4" :class="item.icon" />
+          </RouterLink>
+        </MenubarItem>
+      </MenubarContent>
+    </MenubarMenu>
+  </Menubar>
 </template>

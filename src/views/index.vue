@@ -46,7 +46,7 @@ const requestResult = shallowRef(`{
 </script>
 
 <template>
-  <div class="flex h-full">
+  <div class="flex flex-1 h-full">
     <Sidebar />
 
     <ResizablePanelGroup :direction="panelDirection">
@@ -67,7 +67,7 @@ const requestResult = shallowRef(`{
       <ResizablePanel
         collapsible
         :min-size="25"
-        :default-size="35"
+        :default-size="40"
       >
         <Preview
           v-model:direction="panelDirection"

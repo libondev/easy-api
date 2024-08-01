@@ -9,10 +9,10 @@
       </Button>
     </div>
 
-    <ScrollArea class="flex-1 p-2">
+    <!-- <ScrollArea class="h-full flex-1 p-2">
       <li v-for="item of 50" :key="item">
         {{ item }}
       </li>
-    </ScrollArea>
+    </ScrollArea> -->
   </div>
 </template>
