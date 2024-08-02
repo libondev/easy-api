@@ -12,6 +12,7 @@ const props = withDefaults(
     index?: boolean
     data: D[]
     dataKey: string
+    filterable?: boolean
     columns: ITableColumn[]
     height?: string | number
     maxHeight?: string | number
@@ -19,6 +20,7 @@ const props = withDefaults(
   {
     index: true,
     dataKey: 'id',
+    filterable: true,
     data: () => [],
     columns: () => [],
   },
@@ -76,8 +78,9 @@ function onFilterData(conditions: ConditionGetter[]) {
 
 <template>
   <div>
-    <div class="mb-2 flex justify-end">
-      <FilterData :columns="columns" @filter="onFilterData" />
+    <div class="mb-2 flex gap-1.5 empty:hidden">
+      <slot name="header" />
+      <FilterData v-if="filterable" :columns="columns" @filter="onFilterData" />
     </div>
 
     <div
