@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 const menus = [
-  { text: 'Request', path: 'request' },
+  { text: 'Config', path: 'config' },
   { text: 'Sessions', path: 'sessions' },
   { text: 'Environments', path: 'environments' },
 ]

@@ -12,9 +12,9 @@ const menus = [
     label: 'Settings',
     children: [
       {
-        label: 'Request',
+        label: 'Config',
         icon: 'i-carbon-http',
-        link: '/settings/request',
+        link: '/settings/config',
       },
       {
         label: 'Sessions',

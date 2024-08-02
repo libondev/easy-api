@@ -1,3 +1,8 @@
+<route>
+  meta:
+    title: Environments
+</route>
+
 <script lang="ts" setup>
 import { h } from 'vue'
 import { debounce } from 'es-toolkit'
@@ -14,7 +19,7 @@ const environments = ref<Environments>([])
 
 const onUpdateEnvs = debounce(() => {
   setLocaleEnvironments(environments.value.filter(({ name }) => name).map(toRaw))
-}, 1000)
+}, 600)
 
 const tableColumns: ITableColumn[] = [
   {

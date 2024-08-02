@@ -1,3 +1,8 @@
+<route>
+  meta:
+    title: Dashboard
+</route>
+
 <script lang="ts" setup>
 import { useStorage } from '@vueuse/core'
 import Operate from './components/Operate.vue'

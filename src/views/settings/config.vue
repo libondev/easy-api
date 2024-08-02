@@ -1,3 +1,8 @@
+<route>
+  meta:
+    title: Request Config
+</route>
+
 <script lang="ts" setup>
 import { toast } from 'vue-sonner'
 import localforage from 'localforage'

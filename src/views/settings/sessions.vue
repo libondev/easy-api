@@ -1,3 +1,8 @@
+<route>
+  meta:
+    title: Sessions
+</route>
+
 <script lang="ts" setup>
 // import { ResizablePanel } from '@/components/ui/resizable'
 </script>
