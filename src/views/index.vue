@@ -33,7 +33,7 @@ const panelDirection = useStorage<PanelDirection>(
 
 const requestPending = shallowRef(false)
 const requestDetail = ref({
-  url: '#{label:EXAMPLE,value:https://jsonplaceholder.typicode.com}/todos/1',
+  url: '#{name:EXAMPLE,id:https://jsonplaceholder.typicode.com}/todos/1',
 })
 const requestStatus = shallowRef({} as RequestStatus)
 const requestResult = shallowRef('')

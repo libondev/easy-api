@@ -13,30 +13,30 @@ import type { ITableColumn } from '@/components/ui/table'
 const environments = ref<Environments>([])
 
 const onUpdateEnvs = debounce(() => {
-  setLocaleEnvironments(environments.value.filter(({ label }) => label).map(toRaw))
+  setLocaleEnvironments(environments.value.filter(({ name }) => name).map(toRaw))
 }, 1000)
 
 const tableColumns: ITableColumn[] = [
   {
-    title: 'Nama',
-    field: 'label',
+    title: 'Name',
+    field: 'name',
     renderCell: ({ row }) => h(Input, {
       'name': Math.random(),
-      'modelValue': row.label,
+      'modelValue': row.name,
       'onUpdate:modelValue': (value) => {
-        row.label = value
+        row.name = value
         onUpdateEnvs()
       },
     }),
   },
   {
     title: 'Value',
-    field: 'value',
+    field: 'id',
     renderCell: ({ row }) => h(Input, {
       'name': Math.random(),
-      'modelValue': row.value,
+      'modelValue': row.id,
       'onUpdate:modelValue': (value) => {
-        row.value = value
+        row.id = value
         onUpdateEnvs()
       },
     }),
@@ -60,8 +60,8 @@ const tableColumns: ITableColumn[] = [
 
 function onCreateClick() {
   environments.value.unshift({
-    label: '',
-    value: '',
+    name: '',
+    id: '',
   })
 
   onUpdateEnvs()

@@ -13,7 +13,7 @@ const requestResult = defineModel<RequestResult>('result')
 let _abortController: AbortController
 
 function formatRequestUrl(url: string) {
-  return url.replace(/#\{.*?value:(.*?)\}/g, '$1')
+  return url.replace(/#\{.*?id:(.*?)\}/g, '$1')
 }
 
 let startAt: number

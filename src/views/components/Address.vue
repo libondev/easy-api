@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { type MentionOptions, createMentions } from 'mentions.js'
+import { createMentions } from 'mentions.js'
 
 import type { Environments } from '@/constants/request'
 import { getLocaleEnvironments } from '@/constants/request'
@@ -30,9 +30,7 @@ function initMentions(environmentList: Environments) {
     prefix: '#',
     suffix: '',
     value: modelValue.value,
-    labelFieldName: 'label',
-    valueFieldName: 'value',
-    options: environmentList as unknown as MentionOptions['options'],
+    options: environmentList,
   })
 
   mentionsRef.on('change', onChange)

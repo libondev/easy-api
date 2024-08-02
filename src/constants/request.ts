@@ -15,7 +15,7 @@ export const DEFAULT_REQUEST_CONFIG_INJECTION_KEY = 'defaultConfig' as unknown a
 
 export type DefaultConfig = ReturnType<typeof getDefaultRequestConfig>
 
-export type Environments = Array<{ label: string, value: string }>
+export type Environments = Array<{ name: string, id: string }>
 
 export function getDefaultRequestConfig() {
   return {
@@ -33,7 +33,7 @@ export async function getLocaleEnvironments() {
       .getItem<Environments>('environmentsConfig')
       .then((res) => {
         if (!res) {
-          res = [{ label: 'EXAMPLE', value: 'https://jsonplaceholder.typicode.com' }]
+          res = [{ name: 'EXAMPLE', id: 'https://jsonplaceholder.typicode.com' }]
           setLocaleEnvironments(res)
         }
 
