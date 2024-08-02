@@ -1,18 +1,20 @@
 <script lang="ts" setup>
+import Address from './Address.vue'
 import { DEFAULT_REQUEST_CONFIG_INJECTION_KEY, METHODS } from '@/constants/request'
 import type { RequestDetail, RequestResult, RequestStatus } from '@/types/request'
 
 const defaultConfig = inject(DEFAULT_REQUEST_CONFIG_INJECTION_KEY)!
 
 const requestPending = defineModel<boolean>('pending', { default: false })
-const requestStatus = defineModel('status', { default: {} as RequestStatus })
 const requestDetail = defineModel('detail', { default: {} as RequestDetail })
+const requestStatus = defineModel('status', { default: {} as RequestStatus })
 const requestResult = defineModel<RequestResult>('result')
 
-const inputRef = shallowRef<HTMLInputElement>()
-const selectedMethod = shallowRef('get')
-
 let _abortController: AbortController
+
+function formatRequestUrl(url: string) {
+  return url.replace(/#\{.*?value:(.*?)\}/g, '$1')
+}
 
 let startAt: number
 function onSendClick() {
@@ -24,7 +26,7 @@ function onSendClick() {
   requestPending.value = true
   _abortController = new AbortController()
 
-  fetch(requestDetail.value.url, {
+  fetch(formatRequestUrl(requestDetail.value.url), {
     ...defaultConfig.value,
     signal: _abortController.signal,
     method: requestDetail.value?.method,
@@ -71,8 +73,8 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="p-2 flex gap-1.5 items-center border-b">
-    <Select v-model="requestDetail.method" name="request-method">
+  <div class="relative p-2 flex gap-1.5 items-center border-b">
+    <Select v-model="requestDetail.method" name="request-method" default-value="GET">
       <SelectTrigger aria-label="Select method" class="w-24 min-w-24" :disabled="requestPending">
         <SelectValue placeholder="Select an method" />
       </SelectTrigger>
@@ -82,25 +84,11 @@ onBeforeUnmount(() => {
       </SelectContent>
     </Select>
 
-    <Select v-model="selectedMethod" name="request-variable">
-      <SelectTrigger aria-label="Select variable" class="w-24 min-w-24" :disabled="requestPending">
-        <SelectValue placeholder="Select an Variable" />
-      </SelectTrigger>
-
-      <SelectContent>
-        <SelectItem v-for="method of METHODS" :key="method" :label="method" :value="method" />
-      </SelectContent>
-    </Select>
-
-    <div class="w-full relative">
-      <Input
-        ref="inputRef"
-        v-model.trim="requestDetail.url"
-        :disabled="requestPending"
-        name="request-address"
-        @keydown.enter="onSendClick"
-      />
-    </div>
+    <Address
+      v-model.trim="requestDetail.url"
+      :class="requestPending ? 'opacity-50' : ''"
+      @submit="onSendClick"
+    />
 
     <Button
       v-show="requestPending"

@@ -7,12 +7,12 @@ import { ResizablePanel } from '@/components/ui/resizable'
 import {
   PREVIEW_PANEL_POSITION_DEFAULT_VALUE,
   PREVIEW_PANEL_POSITION_KEY,
-  SIDEBAR_PANEL_VISIBLE_DEFAULT_VALUE,
-  SIDEBAR_PANEL_VISIBLE_KEY,
+  // SIDEBAR_PANEL_VISIBLE_DEFAULT_VALUE,
+  // SIDEBAR_PANEL_VISIBLE_KEY,
 } from '@/constants/layout'
 
 import type { RequestStatus } from '@/types/request'
-import type { PanelDirection, SidebarVisible } from '@/types/layout'
+import type { PanelDirection/* , SidebarVisible */ } from '@/types/layout'
 
 // const toggleSidebarVisibility = useStorage<SidebarVisible>(
 //   SIDEBAR_PANEL_VISIBLE_KEY,
@@ -33,16 +33,10 @@ const panelDirection = useStorage<PanelDirection>(
 
 const requestPending = shallowRef(false)
 const requestDetail = ref({
-  url: 'https://jsonplaceholder.typicode.com/todos/1',
-  method: 'GET',
+  url: '#{label:EXAMPLE,value:https://jsonplaceholder.typicode.com}/todos/1',
 })
-const requestStatus = shallowRef({ code: 200, durations: 5 } as RequestStatus)
-const requestResult = shallowRef(`{
-  userId: 1,
-  id: 1,
-  title: 'delectus aut autem',
-  completed: false,
-}`)
+const requestStatus = shallowRef({} as RequestStatus)
+const requestResult = shallowRef('')
 </script>
 
 <template>

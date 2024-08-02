@@ -62,7 +62,7 @@ const formItems = [
 ] as const
 
 function onUpdatePreferences() {
-  localforage.setItem('default-config', toRaw(defaultConfig.value))
+  localforage.setItem(DEFAULT_REQUEST_CONFIG_INJECTION_KEY as unknown as string, toRaw(defaultConfig.value))
   toast('Updated preferences successful.')
 }
 </script>

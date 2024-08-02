@@ -32,7 +32,7 @@ const menus = [
         </nav>
       </aside>
 
-      <div class="flex-1 pb-20 lg:max-w-xl space-y-6">
+      <div class="flex-1 pb-20 lg:max-w-2xl space-y-6">
         <RouterView />
       </div>
     </div>

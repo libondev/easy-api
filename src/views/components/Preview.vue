@@ -58,14 +58,14 @@ function onCopyClick() {
       </li>
 
       <li title="Status code of request response">
-        <Badge variant="outline" class="py-1 cursor-default font-mono">
+        <Badge v-show="status.code" variant="outline" class="py-1 cursor-default font-mono">
           <i class="size-2 rounded-full mr-1" :class="getCodeStatusColor()" />
           {{ status.code }}
         </Badge>
       </li>
 
       <li title="Response durations time (approximate value)">
-        <Badge variant="outline" class="py-1 cursor-default">
+        <Badge v-show="formattedDurations.size" variant="outline" class="py-1 cursor-default">
           <i class="i-mdi-approximately-equal" />
           <span class="pl-0.5 font-mono">{{ formattedDurations.size }}</span>
           <span class="opacity-75 scale-75 uppercase select-none font-sans">{{ formattedDurations.unit }}</span>
@@ -73,7 +73,7 @@ function onCopyClick() {
       </li>
 
       <li title="Response body size (approximate value)">
-        <Badge variant="outline" class="py-1 cursor-default">
+        <Badge v-show="formattedBodySizes.size" variant="outline" class="py-1 cursor-default">
           <i class="i-mdi-approximately-equal" />
           <span class="pl-0.5 font-mono">{{ formattedBodySizes.size }}</span>
           <span class="opacity-75 scale-75 uppercase select-none font-sans">{{ formattedBodySizes.unit }}</span>
@@ -82,7 +82,7 @@ function onCopyClick() {
     </ul>
 
     <div class="relative p-2 group w-full h-full">
-      <Button class="absolute right-2 top-2 opacity-0 transition-opacity group-hover:opacity-100" @click="onCopyClick">
+      <Button v-show="result" class="absolute right-2 top-2 opacity-0 transition-opacity group-hover:opacity-100" @click="onCopyClick">
         Copy
       </Button>
 

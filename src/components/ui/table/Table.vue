@@ -104,7 +104,11 @@ function onFilterData(conditions: ConditionGetter[]) {
         <tbody class="[&_tr:last-child]:border-0">
           <template v-if="filterData.length">
             <TableRow v-for="row, idx of filterData" :key="_getRowKey(row)">
-              <TableCell v-for="col of formatColumns" :key="col.field" :class="col.cellClass">
+              <TableCell
+                v-for="col of formatColumns"
+                :key="col.field"
+                :class="col.cellClass"
+              >
                 <template v-if="col.renderCell">
                   <Component :is="col.renderCell({ row, col, idx })" />
                 </template>

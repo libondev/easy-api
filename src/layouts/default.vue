@@ -4,17 +4,15 @@ import Header from './components/Header.vue'
 import { Toaster } from '@/components/ui/toast'
 import {
   DEFAULT_REQUEST_CONFIG_INJECTION_KEY,
-  type DefaultConfig,
   getDefaultRequestConfig,
 } from '@/constants/request'
+import type { DefaultConfig } from '@/constants/request'
 
 const basicRequestConfig = ref(getDefaultRequestConfig())
 
 provide(DEFAULT_REQUEST_CONFIG_INJECTION_KEY, basicRequestConfig)
 
-onMounted(async () => {
-  const res = await localforage.getItem<DefaultConfig>('default-config')
-
+localforage.getItem<DefaultConfig>(DEFAULT_REQUEST_CONFIG_INJECTION_KEY as unknown as string).then((res) => {
   if (res) {
     basicRequestConfig.value = res
   }

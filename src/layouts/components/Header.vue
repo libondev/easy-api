@@ -15,12 +15,6 @@ import OperateGuide from './OperateGuide.vue'
     <div class="flex gap-1.5">
       <ToggleMode />
 
-      <RouterLink to="/settings/request">
-        <Button variant="ghost" size="icon">
-          <i class="i-carbon-settings text-lg" />
-        </Button>
-      </RouterLink>
-
       <OperateGuide />
     </div>
   </div>
