@@ -88,6 +88,7 @@ function onCopyClick() {
 
       <textarea
         :value="result"
+        name="response-result"
         placeholder="Empty response text"
         class="border-0 outline-0 w-full h-full resize-none text-sm font-mono bg-transparent"
         readonly

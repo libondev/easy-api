@@ -1,6 +1,6 @@
 import type { RequestHeaders } from '@/constants/request'
 
-export function formatRequestUrl(url: string) {
+export function formatRequestAddress(url: string) {
   if (!url) {
     return ''
   }
@@ -8,7 +8,7 @@ export function formatRequestUrl(url: string) {
   return url.replace(/#\{.*?id:(.*?)\}/g, '$1')
 }
 
-export function formatRequestHeaders(headers: RequestHeaders) {
+export function formatRequestOptions(headers: RequestHeaders) {
   return headers.reduce((map, item) => {
     if (item.enable) {
       map[item.key] = item.value
@@ -16,4 +16,14 @@ export function formatRequestHeaders(headers: RequestHeaders) {
 
     return map
   }, {} as Record<string, string>)
+}
+
+export function getQueryStringFromObject(queries: Record<string, any>) {
+  const _params = new URLSearchParams(queries)
+
+  if (_params.size) {
+    return `?${_params.toString()}`
+  }
+
+  return ''
 }

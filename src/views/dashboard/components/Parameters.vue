@@ -9,7 +9,7 @@ interface InternalHeaderType extends RequestHeader {
   isCustom?: boolean
 }
 
-const headers = defineModel<InternalHeaderType[]>('headers', { default: [] })
+const modelValueList = defineModel<InternalHeaderType[]>('modelValue', { default: [] })
 
 const tableColumns: ITableColumn[] = [
   {
@@ -31,6 +31,7 @@ const tableColumns: ITableColumn[] = [
     renderCell: ({ row }) => h(Input, {
       'name': Math.random(),
       'disabled': !row.isCustom,
+      'class': row.enable ? '' : 'opacity-50',
       'modelValue': row.key,
       'onUpdate:modelValue': (value) => {
         row.key = value
@@ -43,6 +44,7 @@ const tableColumns: ITableColumn[] = [
     renderCell: ({ row }) => h(Input, {
       'name': Math.random(),
       'disabled': !row.isCustom,
+      'class': row.enable ? '' : 'opacity-50',
       'modelValue': row.value,
       'onUpdate:modelValue': (value) => {
         row.value = value
@@ -65,14 +67,14 @@ const tableColumns: ITableColumn[] = [
       variant: 'destructive',
       class: 'h-6 px-1.5',
       onClick: () => {
-        headers.value.splice(idx, 1)
+        modelValueList.value.splice(idx, 1)
       },
     }, () => [h('i', { class: 'i-carbon-trash-can' })]),
   },
 ]
 
 function onCreateClick() {
-  headers.value.push({
+  modelValueList.value.push({
     key: '',
     value: '',
     enable: true,
@@ -83,7 +85,7 @@ function onCreateClick() {
 
 <template>
   <Table
-    :data="headers"
+    :data="modelValueList"
     :index="false"
     :filterable="false"
     :columns="tableColumns"

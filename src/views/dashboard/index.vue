@@ -9,10 +9,11 @@ import { SplitterPanel } from 'radix-vue'
 import Operate from './components/Operate.vue'
 import Preview from './components/Preview.vue'
 import Sidebar from './components/Sidebar.vue'
-import Headers from './components/Headers.vue'
+import Parameters from './components/Parameters.vue'
 import {
-  formatRequestHeaders,
-  formatRequestUrl,
+  formatRequestAddress,
+  formatRequestOptions,
+  getQueryStringFromObject,
 } from './utils/format'
 import {
   PREVIEW_PANEL_POSITION_DEFAULT_VALUE,
@@ -48,6 +49,7 @@ const panelDirection = useStorage<PanelDirection>(
 
 const requestConfig = inject(DEFAULT_REQUEST_CONFIG_INJECTION_KEY)!
 
+const requestQueries = ref<RequestHeaders>([])
 const requestHeader = ref<RequestHeaders>([])
 const requestDetail = ref<RequestDetail>({
   url: '#{name:EXAMPLE,id:https://jsonplaceholder.typicode.com}/todos/1',
@@ -60,7 +62,7 @@ let _startAt: number
 let _abortController: AbortController
 
 function onSendRequest() {
-  const requestUrl = formatRequestUrl(requestDetail.value.url?.trim())
+  const requestUrl = formatRequestAddress(requestDetail.value.url?.trim())
 
   if (!requestUrl || requestPending.value) {
     return
@@ -70,11 +72,13 @@ function onSendRequest() {
   _abortController = new AbortController()
   requestPending.value = true
 
-  fetch(requestUrl, {
+  const _queryString = getQueryStringFromObject(formatRequestOptions(requestQueries.value))
+
+  fetch(requestUrl + _queryString, {
     ...requestConfig.value,
     signal: _abortController.signal,
     method: requestDetail.value.method,
-    headers: formatRequestHeaders(requestHeader.value),
+    headers: formatRequestOptions(requestHeader.value),
   })
     .then(async (res) => {
       requestStatus.value = {
@@ -147,10 +151,10 @@ onBeforeUnmount(() => {
           </TabsList>
 
           <TabsContent value="header">
-            <Headers v-model:headers="requestHeader" />
+            <Parameters v-model="requestHeader" />
           </TabsContent>
           <TabsContent value="query">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Incidunt consequatur architecto sit nihil voluptas perspiciatis facilis nisi cumque suscipit harum pariatur enim illum eveniet quas quia officiis, atque, deserunt saepe?
+            <Parameters v-model="requestQueries" />
           </TabsContent>
           <TabsContent value="params">
             Lorem ipsum dolor, sit amet consectetur adipisicing elit. Incidunt consequatur architecto sit nihil voluptas perspiciatis facilis nisi cumque suscipit harum pariatur enim illum eveniet quas quia officiis, atque, deserunt saepe?
