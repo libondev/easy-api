@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { createMentions } from 'mentions.js'
 
-import type { Environments } from '@/constants/request'
+import type { RequestEnvironments } from '@/constants/request'
 import { getLocaleEnvironments } from '@/constants/request'
 
 const emits = defineEmits<{
@@ -25,7 +25,7 @@ function onKeydownEnter(event: KeyboardEvent) {
 
 let mentionsRef: ReturnType<typeof createMentions>
 
-function initMentions(environmentList: Environments) {
+function initMentions(environmentList: RequestEnvironments) {
   mentionsRef = createMentions({
     prefix: '#',
     suffix: '',
@@ -77,7 +77,7 @@ onBeforeUnmount(() => {
 }
 
 .vanilla-mentions__mention {
-  @apply bg-input py-0.5 px-1 mr-0.5 rounded whitespace-nowrap not-italic select-none;
+  @apply bg-input py-0.5 px-1 mr-1 rounded whitespace-nowrap not-italic select-none;
 }
 
 .vanilla-mentions__dropdown-container {
@@ -99,7 +99,7 @@ onBeforeUnmount(() => {
 
 .vanilla-mentions__dropdown-filter-input {
   height: 18px;
-  @apply flex-1 min-w-32 text-center text-xs outline-none;
+  @apply flex-1 min-w-32 text-center text-xs outline-none bg-transparent;
 }
 
 .vanilla-mentions__dropdown-filter-input:focus {

@@ -1,9 +1,17 @@
 <script lang="ts" setup>
 import Address from './Address.vue'
-import { DEFAULT_REQUEST_CONFIG_INJECTION_KEY, METHODS } from '@/constants/request'
+import {
+  DEFAULT_REQUEST_CONFIG_INJECTION_KEY,
+  METHODS,
+  getLocaleHeaders,
+} from '@/constants/request'
 import type { RequestDetail, RequestResult, RequestStatus } from '@/types/request'
 
 const defaultConfig = inject(DEFAULT_REQUEST_CONFIG_INJECTION_KEY)!
+
+type FormattedHeader = Record<string, string>
+
+const commonHeaders = shallowRef<FormattedHeader>({})
 
 const requestPending = defineModel<boolean>('pending', { default: false })
 const requestDetail = defineModel('detail', { default: {} as RequestDetail })
@@ -30,7 +38,10 @@ function onSendClick() {
     ...defaultConfig.value,
     signal: _abortController.signal,
     method: requestDetail.value?.method,
-    headers: requestDetail.value?.headers,
+    headers: {
+      ...commonHeaders.value,
+      ...requestDetail.value.headers,
+    },
   } as RequestInit)
     .then(async (res) => {
       requestStatus.value = {
@@ -66,6 +77,18 @@ function onCancelClick() {
 }
 
 function onShareClick() { }
+
+onMounted(() => {
+  getLocaleHeaders().then((headers) => {
+    commonHeaders.value = headers.reduce((map, item) => {
+      if (item.enable) {
+        map[item.key] = item.value
+      }
+
+      return map
+    }, {} as FormattedHeader)
+  })
+})
 
 onBeforeUnmount(() => {
   onCancelClick()

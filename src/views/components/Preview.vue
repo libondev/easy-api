@@ -68,7 +68,7 @@ function onCopyClick() {
         <Badge v-show="formattedDurations.size" variant="outline" class="py-1 cursor-default">
           <i class="i-mdi-approximately-equal" />
           <span class="pl-0.5 font-mono">{{ formattedDurations.size }}</span>
-          <span class="opacity-75 scale-75 uppercase select-none font-sans">{{ formattedDurations.unit }}</span>
+          <span class="opacity-75 scale-75 origin-bottom uppercase select-none font-sans">{{ formattedDurations.unit }}</span>
         </Badge>
       </li>
 
@@ -76,7 +76,7 @@ function onCopyClick() {
         <Badge v-show="formattedBodySizes.size" variant="outline" class="py-1 cursor-default">
           <i class="i-mdi-approximately-equal" />
           <span class="pl-0.5 font-mono">{{ formattedBodySizes.size }}</span>
-          <span class="opacity-75 scale-75 uppercase select-none font-sans">{{ formattedBodySizes.unit }}</span>
+          <span class="opacity-75 scale-75 origin-bottom uppercase select-none font-sans">{{ formattedBodySizes.unit }}</span>
         </Badge>
       </li>
     </ul>

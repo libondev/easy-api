@@ -6,27 +6,12 @@ import {
   MenubarMenu,
   MenubarTrigger,
 } from '@/components/ui/menubar'
+import { SETTINGS_MENUS } from '@/constants/layout'
 
 const menus = [
   {
     label: 'Settings',
-    children: [
-      {
-        label: 'Config',
-        icon: 'i-carbon-http',
-        link: '/settings/config',
-      },
-      {
-        label: 'Sessions',
-        icon: 'i-carbon-prompt-session',
-        link: '/settings/sessions',
-      },
-      {
-        label: 'Environments',
-        icon: 'i-carbon-ibm-z-environments-dev-sec-ops',
-        link: '/settings/environments',
-      },
-    ],
+    children: SETTINGS_MENUS,
   },
 ]
 </script>

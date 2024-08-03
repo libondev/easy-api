@@ -1,6 +1,6 @@
 <route>
   meta:
-    title: Request Config
+    title: Options
 </route>
 
 <script lang="ts" setup>
@@ -78,7 +78,7 @@ function onUpdatePreferences() {
       <pre class="code-block text-sm font-mono relative">{{ previewFetchOptionsCode }}</pre>
     </div>
 
-    <div data-orientation="horizontal" role="separator" class="shrink-0 bg-border relative h-px w-full" />
+    <div data-orientation="horizontal" role="separator" class="bg-border relative h-px w-full" />
 
     <ul class="space-y-8">
       <li v-for="item of formItems" :key="item.field" class="space-y-2">

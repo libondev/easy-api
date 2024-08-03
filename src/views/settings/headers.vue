@@ -1,47 +1,60 @@
 <route>
   meta:
-    title: RequestEnvironments
+    title: Headers
 </route>
 
 <script lang="ts" setup>
 import { h } from 'vue'
 import { debounce } from 'es-toolkit'
 
-import type { RequestEnvironments } from '@/constants/request'
-import { getLocaleEnvironments, setLocaleEnvironments } from '@/constants/request'
-
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-
+import { Switch } from '@/components/ui/switch'
+import { getLocaleHeaders, setLocaleHeaders } from '@/constants/request'
 import type { ITableColumn } from '@/components/ui/table'
+import type { RequestHeaders } from '@/constants/request'
 
-const environments = ref<RequestEnvironments>([])
+const headers = ref<RequestHeaders>([])
 
 const onUpdateEnvs = debounce(() => {
-  setLocaleEnvironments(environments.value.filter(({ name }) => name).map(toRaw))
+  setLocaleHeaders(headers.value.filter(({ key }) => key).map(toRaw))
 }, 600)
 
 const tableColumns: ITableColumn[] = [
   {
-    title: 'Name',
-    field: 'name',
+    title: 'Key',
+    field: 'key',
     renderCell: ({ row }) => h(Input, {
       'name': Math.random(),
-      'modelValue': row.name,
+      'modelValue': row.key,
       'onUpdate:modelValue': (value) => {
-        row.name = value
+        row.key = value
         onUpdateEnvs()
       },
     }),
   },
   {
     title: 'Value',
-    field: 'id',
+    field: 'value',
     renderCell: ({ row }) => h(Input, {
       'name': Math.random(),
-      'modelValue': row.id,
+      'modelValue': row.value,
       'onUpdate:modelValue': (value) => {
-        row.id = value
+        row.value = value
+        onUpdateEnvs()
+      },
+    }),
+  },
+  {
+    title: 'Enable',
+    field: 'enable',
+    width: 100,
+    headClass: 'text-center',
+    cellClass: 'text-center',
+    renderCell: ({ row }) => h(Switch, {
+      'checked': row.enable,
+      'onUpdate:checked': (value) => {
+        row.enable = value
         onUpdateEnvs()
       },
     }),
@@ -56,7 +69,7 @@ const tableColumns: ITableColumn[] = [
       variant: 'destructive',
       class: 'h-6 px-1.5',
       onClick: () => {
-        environments.value.splice(idx, 1)
+        headers.value.splice(idx, 1)
         onUpdateEnvs()
       },
     }, () => [h('i', { class: 'i-carbon-trash-can' })]),
@@ -64,30 +77,31 @@ const tableColumns: ITableColumn[] = [
 ]
 
 function onCreateClick() {
-  environments.value.unshift({
-    name: '',
-    id: '',
+  headers.value.unshift({
+    key: '',
+    value: '',
+    enable: true,
   })
 
   onUpdateEnvs()
 }
 
 onMounted(() => {
-  getLocaleEnvironments().then((data) => {
-    environments.value = data
+  getLocaleHeaders().then((data) => {
+    headers.value = data
   })
 })
 </script>
 
 <template>
   <h3 class="text-xl font-medium">
-    RequestEnvironments
+    Headers
   </h3>
-  <p>Save state values as atomized states for easy reuse</p>
+  <p>The request header applied to each request</p>
 
   <div data-orientation="horizontal" role="separator" class="my-6 bg-border relative h-px w-full" />
 
-  <Table :data="environments" data-key="invoice" :columns="tableColumns" height="420px">
+  <Table :data="headers" data-key="invoice" :columns="tableColumns" height="420px">
     <template #header>
       <div class="flex-1">
         <Button variant="outline" class="px-2" @click="onCreateClick">

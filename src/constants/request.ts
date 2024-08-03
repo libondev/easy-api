@@ -15,8 +15,6 @@ export const DEFAULT_REQUEST_CONFIG_INJECTION_KEY = 'defaultConfig' as unknown a
 
 export type DefaultConfig = ReturnType<typeof getDefaultRequestConfig>
 
-export type Environments = Array<{ name: string, id: string }>
-
 export function getDefaultRequestConfig() {
   return {
     mode: 'cors',
@@ -27,10 +25,33 @@ export function getDefaultRequestConfig() {
   }
 }
 
-export async function getLocaleEnvironments() {
-  return new Promise<Environments>((resolve) => {
+export type RequestHeaders = Array<{ key: string, value: string, enable: boolean }>
+
+export function getLocaleHeaders() {
+  return new Promise<RequestHeaders>((resolve) => {
     localforage
-      .getItem<Environments>('environmentsConfig')
+      .getItem<RequestHeaders>('headersConfig')
+      .then((res) => {
+        if (!res) {
+          res = [{ key: 'Content-Type', value: 'application/json; charset=UTF-8', enable: true }]
+          setLocaleHeaders(res)
+        }
+
+        resolve(res)
+      })
+  })
+}
+
+export function setLocaleHeaders(headers: RequestHeaders) {
+  localforage.setItem('headersConfig', headers)
+}
+
+export type RequestEnvironments = Array<{ name: string, id: string }>
+
+export function getLocaleEnvironments() {
+  return new Promise<RequestEnvironments>((resolve) => {
+    localforage
+      .getItem<RequestEnvironments>('environmentsConfig')
       .then((res) => {
         if (!res) {
           res = [{ name: 'EXAMPLE', id: 'https://jsonplaceholder.typicode.com' }]
@@ -42,6 +63,6 @@ export async function getLocaleEnvironments() {
   })
 }
 
-export function setLocaleEnvironments(environments: Environments) {
+export function setLocaleEnvironments(environments: RequestEnvironments) {
   localforage.setItem('environmentsConfig', environments)
 }

@@ -1,13 +1,9 @@
 <script lang="ts" setup>
-const menus = [
-  { text: 'Config', path: 'config' },
-  { text: 'Sessions', path: 'sessions' },
-  { text: 'Environments', path: 'environments' },
-]
+import { SETTINGS_MENUS } from '@/constants/layout'
 </script>
 
 <template>
-  <div class="space-y-6 px-12 h-full overflow-auto">
+  <div class="space-y-6 px-12 overflow-auto">
     <div class="py-6 border-b">
       <h2 class="text-2xl font-bold tracking-tight">
         Settings
@@ -21,18 +17,18 @@ const menus = [
       <aside class="lg:w-1/5">
         <nav class="flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1">
           <RouterLink
-            v-for="menu of menus"
-            :key="menu.path"
-            :to="menu.path"
+            v-for="menu of SETTINGS_MENUS"
+            :key="menu.link"
+            :to="menu.link"
             class="inline-flex items-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:text-accent-foreground h-9 px-4 py-2 w-full text-left justify-start  hover:bg-muted"
             active-class="bg-muted pointer-events-none"
           >
-            {{ menu.text }}
+            {{ menu.label }}
           </RouterLink>
         </nav>
       </aside>
 
-      <div class="flex-1 pb-20 lg:max-w-2xl space-y-6">
+      <div class="flex-1 pb-20 lg:max-w-2xl">
         <RouterView />
       </div>
     </div>
