@@ -3,6 +3,7 @@ import Menus from './Menus.vue'
 import Profiler from './Profiler.vue'
 import ToggleMode from './ToggleMode.vue'
 import OperateGuide from './OperateGuide.vue'
+import { buttonVariants } from '@/components/ui/button/index.ts'
 </script>
 
 <template>
@@ -12,10 +13,14 @@ import OperateGuide from './OperateGuide.vue'
       <Menus />
     </div>
 
-    <div class="flex gap-1.5">
+    <div class="space-x-1.5">
       <ToggleMode />
 
       <OperateGuide />
+
+      <a href="https://github.com/libondev/requester" target="_blank" :class="buttonVariants({ variant: 'ghost', size: 'icon' })">
+        <i class="i-carbon-logo-github text-lg" />
+      </a>
     </div>
   </div>
 </template>
