@@ -1,7 +1,7 @@
 // import type { InjectionKey } from 'vue'
 import localforage from 'localforage'
 
-export const METHODS = [
+export const REQUEST_METHODS = [
   'GET',
   'POST',
   'PUT',
@@ -11,7 +11,7 @@ export const METHODS = [
   'OPTIONS',
 ] as const
 
-export const DEFAULT_REQUEST_CONFIG_INJECTION_KEY = 'defaultConfig' as unknown as InjectionKey<Ref<DefaultConfig>>
+export const DEFAULT_REQUEST_CONFIG_INJECTION_KEY = 'defaultConfig' as unknown as InjectionKey<Ref<RequestInit>>
 
 export type DefaultConfig = ReturnType<typeof getDefaultRequestConfig>
 
@@ -25,7 +25,8 @@ export function getDefaultRequestConfig() {
   }
 }
 
-export type RequestHeaders = Array<{ key: string, value: string, enable: boolean }>
+export interface RequestHeader { key: string, value: string, enable: boolean }
+export type RequestHeaders = RequestHeader[]
 
 export function getLocaleHeaders() {
   return new Promise<RequestHeaders>((resolve) => {
@@ -38,6 +39,9 @@ export function getLocaleHeaders() {
         }
 
         resolve(res)
+      })
+      .catch(() => {
+        resolve([])
       })
   })
 }
@@ -59,6 +63,9 @@ export function getLocaleEnvironments() {
         }
 
         resolve(res)
+      })
+      .catch(() => {
+        resolve([])
       })
   })
 }

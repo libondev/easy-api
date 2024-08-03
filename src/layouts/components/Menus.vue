@@ -18,7 +18,7 @@ const menus = [
 
 <template>
   <RouterLink
-    to="/"
+    to="/dashboard"
     class="ml-1.5 py-1 px-3 rounded-sm select-none text-sm font-medium cursor-default hover:bg-accent hover:text-accent-foreground"
   >
     Dashboard

@@ -13,7 +13,7 @@ const inputRef = shallowRef<HTMLElement>()
 const modelValue = defineModel<string>()
 
 function onChange(value: string) {
-  modelValue.value = value
+  modelValue.value = value.trim()
 }
 
 function onKeydownEnter(event: KeyboardEvent) {
@@ -26,6 +26,9 @@ function onKeydownEnter(event: KeyboardEvent) {
 let mentionsRef: ReturnType<typeof createMentions>
 
 function initMentions(environmentList: RequestEnvironments) {
+  if (mentionsRef)
+    return
+
   mentionsRef = createMentions({
     prefix: '#',
     suffix: '',

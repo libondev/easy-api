@@ -11,7 +11,7 @@ const props = withDefaults(
     class?: HTMLAttributes['class']
     index?: boolean
     data: D[]
-    dataKey: string
+    dataKey?: string
     filterable?: boolean
     columns: ITableColumn[]
     height?: string | number
@@ -64,8 +64,8 @@ function _getCSSUnitValue(value?: string | number) {
 }
 
 // get unique key for each row
-function _getRowKey(row: any) {
-  return row[props.dataKey]
+function _getRowKey(row: any, idx: number) {
+  return props.dataKey ? row[props.dataKey] : idx
 }
 
 const _getCellValue = ({ row, col }: ITableColumnRenderParams) => row[col.field]
@@ -102,7 +102,7 @@ function onFilterData(conditions: ConditionGetter[]) {
 
       <tbody class="[&_tr:last-child]:border-0">
         <template v-if="filterData.length">
-          <TableRow v-for="row, idx of filterData" :key="_getRowKey(row)">
+          <TableRow v-for="row, idx of filterData" :key="_getRowKey(row, idx)">
             <TableCell
               v-for="col of formatColumns"
               :key="col.field"

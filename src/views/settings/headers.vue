@@ -86,10 +86,8 @@ function onCreateClick() {
   onUpdateEnvs()
 }
 
-onMounted(() => {
-  getLocaleHeaders().then((data) => {
-    headers.value = data
-  })
+onMounted(async () => {
+  headers.value = await getLocaleHeaders()
 })
 </script>
 
@@ -101,7 +99,7 @@ onMounted(() => {
 
   <div data-orientation="horizontal" role="separator" class="my-6 bg-border relative h-px w-full" />
 
-  <Table :data="headers" data-key="invoice" :columns="tableColumns" height="420px">
+  <Table :data="headers" :columns="tableColumns" height="420px">
     <template #header>
       <div class="flex-1">
         <Button variant="outline" class="px-2" @click="onCreateClick">

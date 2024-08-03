@@ -1,8 +1,8 @@
-import type { METHODS } from '@/constants/request'
+import type { REQUEST_METHODS } from '@/constants/request'
 
 export interface RequestDetail {
   url: string
-  method?: typeof METHODS[number]
+  method?: typeof REQUEST_METHODS[number]
   headers?: Record<string, string>
 }
 

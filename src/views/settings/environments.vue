@@ -87,7 +87,7 @@ onMounted(() => {
 
   <div data-orientation="horizontal" role="separator" class="my-6 bg-border relative h-px w-full" />
 
-  <Table :data="environments" data-key="invoice" :columns="tableColumns" height="420px">
+  <Table :data="environments" :columns="tableColumns" height="420px">
     <template #header>
       <div class="flex-1">
         <Button variant="outline" class="px-2" @click="onCreateClick">
