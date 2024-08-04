@@ -47,33 +47,31 @@ function onShareClick() {
       />
     </div>
 
-    <div class="ml-auto">
-      <Button
-        v-show="requestPending"
-        variant="destructive"
-        class="w-[72px] min-w-[72px]"
-        title="Cancel this pending request"
-        @click="onCancelClick"
-      >
-        Cancel
-      </Button>
-      <Button
-        v-show="!requestPending"
-        class="w-[72px] min-w-[72px]"
-        title="Send this request"
-        @click="onSendClick"
-      >
-        Send
-      </Button>
+    <Button
+      v-show="requestPending"
+      variant="destructive"
+      class="w-[72px] min-w-[72px]"
+      title="Cancel this pending request"
+      @click="onCancelClick"
+    >
+      Cancel
+    </Button>
+    <Button
+      v-show="!requestPending"
+      class="w-[72px] min-w-[72px]"
+      title="Send this request"
+      @click="onSendClick"
+    >
+      Send
+    </Button>
 
-      <Button
-        class="px-3"
-        variant="outline"
-        title="Generate links to share with others"
-        @click="onShareClick"
-      >
-        Share
-      </Button>
-    </div>
+    <Button
+      class="px-3"
+      variant="outline"
+      title="Generate links to share with others"
+      @click="onShareClick"
+    >
+      Share
+    </Button>
   </div>
 </template>
