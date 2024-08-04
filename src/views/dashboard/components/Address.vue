@@ -72,7 +72,7 @@ onBeforeUnmount(() => {
 }
 
 .vanilla-mentions__input {
-  padding: 4px 0 4px 8px;
+  padding: 4px 8px;
   line-height: 23px;
   @apply relative h-8 w-full rounded-md text-nowrap border border-input bg-transparent text-[14px] shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 ring-offset-1 focus-visible:ring-ring;
 }

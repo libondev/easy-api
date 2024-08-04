@@ -12,9 +12,9 @@ import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
 import { getLocaleHeaders, setLocaleHeaders } from '@/constants/request'
 import type { ITableColumn } from '@/components/ui/table'
-import type { RequestHeaders } from '@/constants/request'
+import type { RequestConfigures } from '@/constants/request'
 
-const headers = ref<RequestHeaders>([])
+const headers = ref<RequestConfigures>([])
 
 const onUpdateEnvs = debounce(() => {
   setLocaleHeaders(headers.value.filter(({ key }) => key).map(toRaw))
@@ -48,7 +48,7 @@ const tableColumns: ITableColumn[] = [
   {
     title: 'Enable',
     field: 'enable',
-    width: 100,
+    width: 75,
     headClass: 'text-center',
     cellClass: 'text-center',
     renderCell: ({ row }) => h(Switch, {
@@ -65,12 +65,16 @@ const tableColumns: ITableColumn[] = [
     width: 50,
     headClass: 'text-center',
     cellClass: 'text-center',
+    renderHead: () => h(Button, {
+      variant: 'outline',
+      class: 'size-7 p-1',
+      onClick: onCreateClick,
+    }, () => [h('i', { class: 'i-ph-plus-bold' })]),
     renderCell: ({ idx }) => h(Button, {
       variant: 'destructive',
-      class: 'h-6 px-1.5',
+      class: 'size-7 p-1',
       onClick: () => {
         headers.value.splice(idx, 1)
-        onUpdateEnvs()
       },
     }, () => [h('i', { class: 'i-carbon-trash-can' })]),
   },
@@ -95,17 +99,9 @@ onMounted(async () => {
   <h3 class="text-xl font-medium">
     Headers
   </h3>
-  <p>The request header applied to each request</p>
+  <p class="mb-4">
+    The request header applied to each request
+  </p>
 
-  <div data-orientation="horizontal" role="separator" class="my-6 bg-border relative h-px w-full" />
-
-  <Table :data="headers" :columns="tableColumns" height="420px">
-    <template #header>
-      <div class="flex-1">
-        <Button variant="outline" class="px-2" @click="onCreateClick">
-          <i class="i-ph-plus-bold" />
-        </Button>
-      </div>
-    </template>
-  </Table>
+  <Table :data="headers" :columns="tableColumns" height="420px" :filterable="false" />
 </template>

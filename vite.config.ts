@@ -25,6 +25,10 @@ export default defineConfig(({ mode }) => ({
           if (id.includes('vue') || id.includes('pinia'))
             return 'vue-vendors'
 
+          if (id.includes('codemirror')) {
+            return 'codemirror'
+          }
+
           return 'vendors'
         },
       },

@@ -1,93 +1,26 @@
 <script lang="ts" setup>
-import type { ITableColumn } from '@/components/ui/table/index.ts'
-import type { RequestHeader } from '@/constants/request.ts'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
+const modelValue = defineModel<string>()
 
-interface InternalHeaderType extends RequestHeader {
-  isCustom?: boolean
-}
-
-const modelValueList = defineModel<InternalHeaderType[]>('modelValue', { default: [] })
-
-const tableColumns: ITableColumn[] = [
-  {
-    title: '',
-    field: 'enable',
-    width: 40,
-    headClass: 'text-center',
-    cellClass: 'text-center',
-    renderCell: ({ row }) => h(Checkbox, {
-      'checked': row.enable,
-      'onUpdate:checked': (value) => {
-        row.enable = value
-      },
-    }),
-  },
-  {
-    title: 'Key',
-    field: 'key',
-    renderCell: ({ row }) => h(Input, {
-      'name': Math.random(),
-      'disabled': !row.isCustom,
-      'class': row.enable ? '' : 'opacity-50',
-      'modelValue': row.key,
-      'onUpdate:modelValue': (value) => {
-        row.key = value
-      },
-    }),
-  },
-  {
-    title: 'Value',
-    field: 'value',
-    renderCell: ({ row }) => h(Input, {
-      'name': Math.random(),
-      'disabled': !row.isCustom,
-      'class': row.enable ? '' : 'opacity-50',
-      'modelValue': row.value,
-      'onUpdate:modelValue': (value) => {
-        row.value = value
-      },
-    }),
-  },
-  {
-    title: '',
-    field: 'operate',
-    width: 50,
-    headClass: 'text-center',
-    cellClass: 'text-center',
-    renderHead: () => h(Button, {
-      variant: 'outline',
-      class: 'px-2',
-      onClick: onCreateClick,
-    }, () => [h('i', { class: 'i-ph-plus-bold' })]),
-
-    renderCell: ({ idx }) => h(Button, {
-      variant: 'destructive',
-      class: 'h-6 px-1.5',
-      onClick: () => {
-        modelValueList.value.splice(idx, 1)
-      },
-    }, () => [h('i', { class: 'i-carbon-trash-can' })]),
-  },
+const BODY_TYPE = [
+  'Raw',
+  'FormData',
+  'GraphQL',
 ]
-
-function onCreateClick() {
-  modelValueList.value.push({
-    key: '',
-    value: '',
-    enable: true,
-    isCustom: true,
-  })
-}
 </script>
 
 <template>
-  <Table
-    :data="modelValueList"
-    :index="false"
-    :filterable="false"
-    :columns="tableColumns"
-  />
+  <div class="">
+    <RadioGroup :default-value="BODY_TYPE[0]" class="flex items-center justify-center pt-1.5 pb-3 gap-6">
+      <div v-for="type of BODY_TYPE" :key="type" class="flex items-center gap-x-1">
+        <RadioGroupItem :id="type" :value="type" />
+        <Label :for="type" class="cursor-pointer">{{ type }}</Label>
+      </div>
+    </RadioGroup>
+
+    <textarea
+      v-model="modelValue"
+      name="request-body"
+      class="flex min-h-[60px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 ring-offset-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+    />
+  </div>
 </template>

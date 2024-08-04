@@ -1,9 +1,11 @@
-import type { REQUEST_METHODS } from '@/constants/request'
+import type { REQUEST_METHODS, RequestConfigures } from '@/constants/request'
 
 export interface RequestDetail {
   url: string
+  body?: any
   method?: typeof REQUEST_METHODS[number]
-  headers?: Record<string, string>
+  headers?: RequestConfigures
+  queries?: RequestConfigures
 }
 
 export interface RequestStatus {

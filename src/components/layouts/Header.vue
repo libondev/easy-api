@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import Menus from './Menus.vue'
 import Profiler from './Profiler.vue'
+import Document from './Document.vue'
 import ToggleMode from './ToggleMode.vue'
-import OperateGuide from './OperateGuide.vue'
 import { buttonVariants } from '@/components/ui/button/index.ts'
 </script>
 
@@ -16,7 +16,7 @@ import { buttonVariants } from '@/components/ui/button/index.ts'
     <div class="space-x-1.5">
       <ToggleMode />
 
-      <OperateGuide />
+      <Document />
 
       <a href="https://github.com/libondev/requester" target="_blank" :class="buttonVariants({ variant: 'ghost', size: 'icon' })">
         <i class="i-carbon-logo-github text-lg" />

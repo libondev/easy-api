@@ -77,7 +77,7 @@ function onFilterData(conditions: ConditionGetter[]) {
 </script>
 
 <template>
-  <div class="mb-2 flex gap-1.5 empty:hidden">
+  <div class="mb-2 px-[9px] flex justify-between gap-1.5 empty:hidden">
     <slot name="header" />
     <FilterData v-if="filterable" :columns="columns" @filter="onFilterData" />
   </div>

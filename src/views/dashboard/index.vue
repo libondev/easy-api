@@ -7,9 +7,9 @@
 import { useStorage } from '@vueuse/core'
 import { SplitterPanel } from 'radix-vue'
 import Operate from './components/Operate.vue'
-import Preview from './components/Preview.vue'
 import Sidebar from './components/Sidebar.vue'
-import Parameters from './components/Parameters.vue'
+import Preview from './components/Preview.vue'
+
 import {
   formatRequestAddress,
   formatRequestOptions,
@@ -26,9 +26,10 @@ import {
   getLocaleHeaders,
 } from '@/constants/request'
 
-import type { RequestHeaders } from '@/constants/request'
 import type { RequestDetail, RequestStatus } from '@/types/request'
 import type { PanelDirection/* , SidebarVisible */ } from '@/types/layout'
+
+const Configure = defineAsyncComponent(() => import('./components/Configure.vue'))
 
 // const toggleSidebarVisibility = useStorage<SidebarVisible>(
 //   SIDEBAR_PANEL_VISIBLE_KEY,
@@ -47,22 +48,24 @@ const panelDirection = useStorage<PanelDirection>(
   PREVIEW_PANEL_POSITION_DEFAULT_VALUE,
 )
 
-const requestConfig = inject(DEFAULT_REQUEST_CONFIG_INJECTION_KEY)!
+const requestConfigs = inject(DEFAULT_REQUEST_CONFIG_INJECTION_KEY)!
 
-const requestQueries = ref<RequestHeaders>([])
-const requestHeader = ref<RequestHeaders>([])
-const requestDetail = ref<RequestDetail>({
+const requestDetails = ref<RequestDetail>({
   url: '#{value:EXAMPLE,key:https://jsonplaceholder.typicode.com}/todos/1',
+  body: null,
+  headers: [],
+  queries: [],
 })
-const requestStatus = shallowRef({} as RequestStatus)
+
 const requestResult = shallowRef('')
+const requestStatus = shallowRef({} as RequestStatus)
 const requestPending = shallowRef(false)
 
 let _startAt: number
 let _abortController: AbortController
 
 function onSendRequest() {
-  const requestUrl = formatRequestAddress(requestDetail.value.url?.trim())
+  const requestUrl = formatRequestAddress(requestDetails.value.url?.trim())
 
   if (!requestUrl || requestPending.value) {
     return
@@ -72,13 +75,15 @@ function onSendRequest() {
   _abortController = new AbortController()
   requestPending.value = true
 
-  const _queryString = getQueryStringFromObject(formatRequestOptions(requestQueries.value))
+  const _queryString = getQueryStringFromObject(formatRequestOptions(requestDetails.value.queries))
 
+  console.info('🥑dashboard/index.vue:83/[requestDetails.value.body]:\n ', requestDetails.value.body)
   fetch(requestUrl + _queryString, {
-    ...requestConfig.value,
+    ...requestConfigs.value,
+    body: requestDetails.value.body,
     signal: _abortController.signal,
-    method: requestDetail.value.method,
-    headers: formatRequestOptions(requestHeader.value),
+    method: requestDetails.value.method,
+    headers: formatRequestOptions(requestDetails.value.headers),
   })
     .then(async (res) => {
       requestStatus.value = {
@@ -113,7 +118,7 @@ function onCancelRequest() {
 }
 
 onMounted(async () => {
-  requestHeader.value = await getLocaleHeaders()
+  requestDetails.value.headers = await getLocaleHeaders()
 })
 
 onBeforeUnmount(() => {
@@ -131,35 +136,17 @@ onBeforeUnmount(() => {
         :default-size="60"
       >
         <Operate
-          v-model:detail="requestDetail"
+          v-model:detail="requestDetails"
           :pending="requestPending"
           @submit="onSendRequest"
           @cancel="onCancelRequest"
         />
 
-        <Tabs default-value="header" class="p-2">
-          <TabsList class="w-full">
-            <TabsTrigger class="flex-1" value="header">
-              Headers
-            </TabsTrigger>
-            <TabsTrigger class="flex-1" value="query">
-              Query
-            </TabsTrigger>
-            <TabsTrigger class="flex-1" value="params">
-              Params
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="header">
-            <Parameters v-model="requestHeader" />
-          </TabsContent>
-          <TabsContent value="query">
-            <Parameters v-model="requestQueries" />
-          </TabsContent>
-          <TabsContent value="params">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Incidunt consequatur architecto sit nihil voluptas perspiciatis facilis nisi cumque suscipit harum pariatur enim illum eveniet quas quia officiis, atque, deserunt saepe?
-          </TabsContent>
-        </Tabs>
+        <Configure
+          v-model:body="requestDetails.body"
+          v-model:headers="requestDetails.headers"
+          v-model:queries="requestDetails.queries"
+        />
       </SplitterPanel>
 
       <ResizableHandle with-handle />

@@ -1,36 +1,41 @@
-<route>
-  meta:
-    title: RequestEnvironments
-</route>
-
 <script lang="ts" setup>
 import { h } from 'vue'
-import { debounce } from 'es-toolkit'
-
-import type { RequestEnvironments } from '@/constants/request'
-import { getLocaleEnvironments, setLocaleEnvironments } from '@/constants/request'
-
+import type { ITableColumn } from '@/components/ui/table/index.ts'
+import type { RequestConfigure } from '@/constants/request.ts'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
 
-import type { ITableColumn } from '@/components/ui/table'
+interface InternalHeaderType extends RequestConfigure {
+  isCustom?: boolean
+}
 
-const environments = ref<RequestEnvironments>([])
-
-const onUpdateEnvs = debounce(() => {
-  setLocaleEnvironments(environments.value.filter(({ key }) => key).map(toRaw))
-}, 600)
+const modelValueList = defineModel<InternalHeaderType[]>('modelValue', { default: [] })
 
 const tableColumns: ITableColumn[] = [
   {
-    title: 'Name',
+    title: '',
+    field: 'enable',
+    width: 40,
+    headClass: 'text-center',
+    cellClass: 'text-center',
+    renderCell: ({ row }) => h(Checkbox, {
+      'checked': row.enable,
+      'onUpdate:checked': (value) => {
+        row.enable = value
+      },
+    }),
+  },
+  {
+    title: 'Key',
     field: 'key',
     renderCell: ({ row }) => h(Input, {
       'name': Math.random(),
+      'disabled': !row.isCustom,
+      'class': row.enable ? '' : 'opacity-50',
       'modelValue': row.key,
       'onUpdate:modelValue': (value) => {
         row.key = value
-        onUpdateEnvs()
       },
     }),
   },
@@ -39,10 +44,11 @@ const tableColumns: ITableColumn[] = [
     field: 'value',
     renderCell: ({ row }) => h(Input, {
       'name': Math.random(),
+      'disabled': !row.isCustom,
+      'class': row.enable ? '' : 'opacity-50',
       'modelValue': row.value,
       'onUpdate:modelValue': (value) => {
         row.value = value
-        onUpdateEnvs()
       },
     }),
   },
@@ -61,36 +67,27 @@ const tableColumns: ITableColumn[] = [
       variant: 'destructive',
       class: 'size-7 p-1',
       onClick: () => {
-        environments.value.splice(idx, 1)
-        onUpdateEnvs()
+        modelValueList.value.splice(idx, 1)
       },
     }, () => [h('i', { class: 'i-carbon-trash-can' })]),
   },
 ]
 
 function onCreateClick() {
-  environments.value.unshift({
-    value: '',
+  modelValueList.value.push({
     key: '',
+    value: '',
+    enable: true,
+    isCustom: true,
   })
-
-  onUpdateEnvs()
 }
-
-onMounted(() => {
-  getLocaleEnvironments().then((data) => {
-    environments.value = data
-  })
-})
 </script>
 
 <template>
-  <h3 class="text-xl font-medium">
-    RequestEnvironments
-  </h3>
-  <p class="mb-4">
-    Save state values as atomized states for easy reuse
-  </p>
-
-  <Table :data="environments" :columns="tableColumns" :filterable="false" height="420px" />
+  <Table
+    :data="modelValueList"
+    :index="false"
+    :filterable="false"
+    :columns="tableColumns"
+  />
 </template>

@@ -6,6 +6,9 @@ export const SIDEBAR_PANEL_VISIBLE_KEY = 'requester.sidebar.panel.visible'
 export const PREVIEW_PANEL_POSITION_DEFAULT_VALUE = 'vertical'
 export const PREVIEW_PANEL_POSITION_KEY = 'requester.preview.panel.position'
 
+export const DASHBOARD_TABS_CHECKED_DEFAULT_VALUE = 'header'
+export const DASHBOARD_TABS_CHECKED_KEY = 'requester.dashboard.tabs.checked'
+
 export const SETTINGS_MENUS = [
   {
     label: 'Options',

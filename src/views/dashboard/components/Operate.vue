@@ -40,7 +40,7 @@ function onShareClick() {
 
     <Address
       v-model="requestDetail.url"
-      :class="requestPending ? 'opacity-50' : ''"
+      :class="requestPending ? 'opacity-50 pointer-events-none' : ''"
       @submit="onSendClick"
     />
 

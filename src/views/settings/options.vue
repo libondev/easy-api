@@ -5,8 +5,10 @@
 
 <script lang="ts" setup>
 import { toast } from 'vue-sonner'
-import localforage from 'localforage'
-import { DEFAULT_REQUEST_CONFIG_INJECTION_KEY } from '@/constants/request'
+import {
+  DEFAULT_REQUEST_CONFIG_INJECTION_KEY,
+  setLocaleDefaultConfig,
+} from '@/constants/request'
 
 const defaultConfig = inject(DEFAULT_REQUEST_CONFIG_INJECTION_KEY)!
 
@@ -67,7 +69,7 @@ const formItems = [
 ] as const
 
 function onUpdatePreferences() {
-  localforage.setItem(DEFAULT_REQUEST_CONFIG_INJECTION_KEY as unknown as string, toRaw(defaultConfig.value))
+  setLocaleDefaultConfig(toRaw(defaultConfig.value))
   toast('Updated preferences successful.')
 }
 </script>
