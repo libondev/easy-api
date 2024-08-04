@@ -31,7 +31,7 @@ const tableColumns: ITableColumn[] = [
     field: 'key',
     renderCell: ({ row }) => h(Input, {
       'name': Math.random(),
-      'disabled': !row.isCustom,
+      'readonly': !row.isCustom,
       'class': row.enable ? '' : 'opacity-50',
       'modelValue': row.key,
       'onUpdate:modelValue': (value) => {
@@ -44,7 +44,7 @@ const tableColumns: ITableColumn[] = [
     field: 'value',
     renderCell: ({ row }) => h(Input, {
       'name': Math.random(),
-      'disabled': !row.isCustom,
+      'readonly': !row.isCustom,
       'class': row.enable ? '' : 'opacity-50',
       'modelValue': row.value,
       'onUpdate:modelValue': (value) => {

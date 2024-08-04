@@ -4,9 +4,9 @@
 <template>
   <div class="h-full w-56 min-w-56 border-r flex flex-col">
     <div class="p-2">
-      <Button size="xs">
+      <!-- <Button size="xs">
         Create
-      </Button>
+      </Button> -->
     </div>
 
     <!-- <ScrollArea class="h-full flex-1 p-2">

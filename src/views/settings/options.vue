@@ -76,7 +76,7 @@ function onUpdatePreferences() {
 
 <template>
   <div class="space-y-6 h-full">
-    <div class="rounded-md bg-input px-3 py-2">
+    <div class="rounded-md bg-input px-3 py-2 overflow-auto">
       <pre class="code-block text-sm font-mono relative">{{ previewFetchOptionsCode }}</pre>
     </div>
 

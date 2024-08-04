@@ -1,6 +1,6 @@
 import type { REQUEST_METHODS, RequestConfigures } from '@/constants/request'
 
-export interface RequestDetail {
+export interface RequestDetails {
   url: string
   body?: any
   method?: typeof REQUEST_METHODS[number]
@@ -8,9 +8,8 @@ export interface RequestDetail {
   queries?: RequestConfigures
 }
 
-export interface RequestStatus {
+export interface RequestResults {
   code: number
+  text: string
   durations: number
 }
-
-export type RequestResult = any

@@ -7,7 +7,7 @@
 import { useStorage } from '@vueuse/core'
 import { SplitterPanel } from 'radix-vue'
 import Operate from './components/Operate.vue'
-import Sidebar from './components/Sidebar.vue'
+// import Sidebar from './components/Sidebar.vue'
 import Preview from './components/Preview.vue'
 
 import {
@@ -22,6 +22,7 @@ import {
   // SIDEBAR_PANEL_VISIBLE_KEY,
 } from '@/constants/layout'
 import type {
+  RequestConfigure,
   RequestConfigures,
 } from '@/constants/request'
 import {
@@ -31,7 +32,7 @@ import {
   setCurrentRequest,
 } from '@/constants/request'
 
-import type { RequestDetail, RequestStatus } from '@/types/request'
+import type { RequestDetails, RequestResults } from '@/types/request'
 import type { PanelDirection/* , SidebarVisible */ } from '@/types/layout'
 
 const Configure = defineAsyncComponent(() => import('./components/Configure.vue'))
@@ -55,11 +56,9 @@ const panelDirection = useStorage<PanelDirection>(
 
 const requestConfigs = inject(DEFAULT_REQUEST_CONFIG_INJECTION_KEY)!
 
-const requestDetails = ref({} as RequestDetail)
-
-const requestResult = shallowRef('')
-const requestStatus = shallowRef({} as RequestStatus)
 const requestPending = shallowRef(false)
+const requestDetails = ref({} as RequestDetails)
+const requestResults = shallowRef({} as RequestResults)
 
 let _startAt: number
 let _abortController: AbortController
@@ -75,9 +74,9 @@ function onSendRequest() {
   _abortController = new AbortController()
   requestPending.value = true
 
-  const _queryString = getQueryStringFromObject(formatRequestOptions(requestDetails.value.queries))
+  setCurrentRequest(requestDetails.value)
 
-  setCurrentRequest(toRaw(requestDetails.value))
+  const _queryString = getQueryStringFromObject(formatRequestOptions(requestDetails.value.queries))
 
   fetch(requestUrl + _queryString, {
     ...requestConfigs.value,
@@ -87,10 +86,7 @@ function onSendRequest() {
     headers: formatRequestOptions(requestDetails.value.headers),
   })
     .then(async (res) => {
-      requestStatus.value = {
-        code: res.status,
-        durations: Date.now() - _startAt,
-      }
+      const durations = Date.now() - _startAt
 
       let response = await res.text()
 
@@ -98,15 +94,18 @@ function onSendRequest() {
         response = JSON.stringify(response)
       }
 
-      requestResult.value = response
+      requestResults.value = {
+        durations,
+        text: response,
+        code: res.status,
+      }
     })
     .catch((err) => {
-      requestStatus.value = {
+      requestResults.value = {
+        text: err,
         code: err.status || 500,
         durations: Date.now() - _startAt,
       }
-
-      requestResult.value = err
     })
     .finally(() => {
       requestPending.value = false
@@ -120,8 +119,22 @@ function onCancelRequest() {
 
 // merge common headers
 function updateRequestHeaders(currentHeaders: RequestConfigures, commonHeaders: RequestConfigures) {
-  console.info('🎡dashboard/index.vue:120/[currentHeaders, commonHeaders]:\n ', currentHeaders, commonHeaders)
-  // todo
+  // eslint-disable-next-line no-sequences
+  const currentHeadersMap = currentHeaders.reduce((map, cur) => (map[cur.key] = cur, map), {} as Record<string, RequestConfigure>)
+
+  const headers: RequestConfigures = [...currentHeaders]
+
+  commonHeaders.forEach((h) => {
+    // Attach public, but do not enable.
+    if (!currentHeadersMap[h.key]) {
+      headers.push({
+        ...h,
+        enable: false,
+      })
+    }
+  })
+
+  return headers
 }
 
 onMounted(async () => {
@@ -129,18 +142,21 @@ onMounted(async () => {
   requestDetails.value = await getCurrentRequest()
 
   // merge current headers and common headers
-  updateRequestHeaders(requestDetails.value.headers ?? [], await getLocaleHeaders())
+  requestDetails.value.headers = updateRequestHeaders(
+    requestDetails.value.headers ?? [],
+    await getLocaleHeaders(),
+  )
 })
 
 onBeforeUnmount(() => {
-  onCancelRequest()
   setCurrentRequest(requestDetails.value)
+  onCancelRequest()
 })
 </script>
 
 <template>
-  <div class="flex flex-1 h-full">
-    <Sidebar />
+  <div class="flex h-full">
+    <!-- <Sidebar /> -->
 
     <ResizablePanelGroup :direction="panelDirection">
       <SplitterPanel
@@ -170,8 +186,8 @@ onBeforeUnmount(() => {
       >
         <Preview
           v-model:direction="panelDirection"
-          :result="requestResult"
-          :status="requestStatus"
+          :result="requestResults"
+          :pending="requestPending"
         />
       </SplitterPanel>
     </ResizablePanelGroup>

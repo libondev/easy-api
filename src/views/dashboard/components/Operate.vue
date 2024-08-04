@@ -2,7 +2,7 @@
 import Address from './Address.vue'
 
 import { REQUEST_METHODS } from '@/constants/request'
-import type { RequestDetail } from '@/types/request'
+import type { RequestDetails } from '@/types/request'
 
 const emits = defineEmits<{
   share: []
@@ -11,7 +11,7 @@ const emits = defineEmits<{
 }>()
 
 const requestPending = defineModel<boolean>('pending', { default: false })
-const requestDetail = defineModel('detail', { default: {} as RequestDetail })
+const requestDetail = defineModel('detail', { default: {} as RequestDetails })
 
 function onSendClick() {
   emits('submit')
@@ -38,37 +38,42 @@ function onShareClick() {
       </SelectContent>
     </Select>
 
-    <Address
-      v-model="requestDetail.url"
-      :class="requestPending ? 'opacity-50 pointer-events-none' : ''"
-      @submit="onSendClick"
-    />
+    <div class="flex-1 h-8 relative">
+      <Address
+        v-model="requestDetail.url"
+        :class="requestPending ? 'opacity-50 pointer-events-none' : ''"
+        class="absolute left-0 right-0 top-0"
+        @submit="onSendClick"
+      />
+    </div>
 
-    <Button
-      v-show="requestPending"
-      variant="destructive"
-      class="w-[72px] min-w-[72px]"
-      title="Cancel this pending request"
-      @click="onCancelClick"
-    >
-      Cancel
-    </Button>
-    <Button
-      v-show="!requestPending"
-      class="w-[72px] min-w-[72px]"
-      title="Send this request"
-      @click="onSendClick"
-    >
-      Send
-    </Button>
+    <div class="ml-auto">
+      <Button
+        v-show="requestPending"
+        variant="destructive"
+        class="w-[72px] min-w-[72px]"
+        title="Cancel this pending request"
+        @click="onCancelClick"
+      >
+        Cancel
+      </Button>
+      <Button
+        v-show="!requestPending"
+        class="w-[72px] min-w-[72px]"
+        title="Send this request"
+        @click="onSendClick"
+      >
+        Send
+      </Button>
 
-    <Button
-      class="px-3"
-      variant="outline"
-      title="Generate links to share with others"
-      @click="onShareClick"
-    >
-      Share
-    </Button>
+      <Button
+        class="px-3"
+        variant="outline"
+        title="Generate links to share with others"
+        @click="onShareClick"
+      >
+        Share
+      </Button>
+    </div>
   </div>
 </template>

@@ -5,17 +5,17 @@ import { formatTimestampWithUnit } from '@/utils/parsers/date'
 import { calculateStringByteSize, formatStringSizeWithUnit } from '@/utils/parsers/string'
 
 import type { PanelDirection } from '@/types/layout'
-import type { RequestResult, RequestStatus } from '@/types/request'
+import type { RequestResults } from '@/types/request'
 
 const props = defineProps<{
-  result: RequestResult
-  status: RequestStatus
+  result: RequestResults
+  pending: boolean
 }>()
 
 const panelDirection = defineModel<PanelDirection>('direction')
 
-const formattedDurations = computed(() => formatTimestampWithUnit(props.status.durations))
-const formattedBodySizes = computed(() => formatStringSizeWithUnit(calculateStringByteSize(props.result)))
+const formattedDurations = computed(() => formatTimestampWithUnit(props.result.durations))
+const formattedBodySizes = computed(() => formatStringSizeWithUnit(calculateStringByteSize(props.result.text)))
 
 const onTogglePanelDirection = useToggle(panelDirection, {
   truthyValue: 'horizontal',
@@ -23,7 +23,7 @@ const onTogglePanelDirection = useToggle(panelDirection, {
 })
 
 function getCodeStatusColor() {
-  const { code } = props.status
+  const { code } = props.result
 
   if (code >= 200 && code < 300) {
     return 'bg-green-300'
@@ -35,11 +35,11 @@ function getCodeStatusColor() {
     return 'bg-red-300'
   }
 
-  return ''
+  return 'bg-gray-500'
 }
 
 function onCopyClick() {
-  navigator.clipboard.writeText(props.result)
+  navigator.clipboard.writeText(props.result.text)
     .then(() => {
       toast('Copied response body successful.')
     }).catch(() => {
@@ -58,36 +58,38 @@ function onCopyClick() {
       </li>
 
       <li title="Status code of request response">
-        <Badge v-show="status.code" variant="outline" class="py-1 cursor-default font-mono">
+        <Badge variant="outline" class="py-1 cursor-default font-mono">
           <i class="size-2 rounded-full mr-1" :class="getCodeStatusColor()" />
-          {{ status.code }}
+          {{ result.code ?? 0 }}
         </Badge>
       </li>
 
       <li title="Response durations time (approximate value)">
-        <Badge v-show="formattedDurations.size" variant="outline" class="py-1 cursor-default">
+        <Badge variant="outline" class="py-1 cursor-default">
           <i class="i-mdi-approximately-equal" />
           <span class="font-mono">{{ formattedDurations.size }}</span>
-          <span class="opacity-75 scale-75 origin-[center_80%] uppercase select-none font-sans">{{ formattedDurations.unit }}</span>
+          <span class="opacity-75 scale-75 origin-[left_90%] ml-0.5 uppercase select-none font-sans">{{ formattedDurations.unit }}</span>
         </Badge>
       </li>
 
       <li title="Response body size (approximate value)">
-        <Badge v-show="formattedBodySizes.size" variant="outline" class="py-1 cursor-default">
+        <Badge variant="outline" class="py-1 cursor-default">
           <i class="i-mdi-approximately-equal" />
           <span class="font-mono">{{ formattedBodySizes.size }}</span>
-          <span class="opacity-75 scale-75 origin-[center_80%] uppercase select-none font-sans">{{ formattedBodySizes.unit }}</span>
+          <span class="opacity-75 scale-75 origin-[left_90%] ml-0.5 uppercase select-none font-sans">{{ formattedBodySizes.unit }}</span>
         </Badge>
       </li>
     </ul>
 
     <div class="relative p-2 group w-full h-full">
-      <Button v-show="result" class="absolute right-2 top-2 opacity-0 transition-opacity group-hover:opacity-100" @click="onCopyClick">
+      <Button v-show="result.text" class="absolute right-2 top-2 opacity-0 transition-opacity group-hover:opacity-100" @click="onCopyClick">
         Copy
       </Button>
 
+      <div v-if="pending" class="absolute w-full h-full left-0 top-0 backdrop-blur-sm pointer-events-none" />
+
       <textarea
-        :value="result"
+        :value="result.text"
         name="response-result"
         placeholder="Empty response text"
         class="border-0 outline-0 w-full h-full resize-none text-sm font-mono bg-transparent"

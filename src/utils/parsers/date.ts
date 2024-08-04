@@ -3,6 +3,13 @@ const MINUTES = SECONDS * 60
 const HOURS = MINUTES * 60
 
 export function formatTimestampWithUnit(timestamp: number) {
+  if (!timestamp || timestamp < 0) {
+    return {
+      size: 0,
+      unit: 'ms',
+    }
+  }
+
   if (timestamp < SECONDS) {
     return {
       size: timestamp,

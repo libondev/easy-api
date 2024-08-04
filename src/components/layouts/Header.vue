@@ -1,15 +1,15 @@
 <script lang="ts" setup>
 import Menus from './Menus.vue'
-import Profiler from './Profiler.vue'
+// import Profiler from './Profiler.vue'
 import Document from './Document.vue'
 import ToggleMode from './ToggleMode.vue'
 import { buttonVariants } from '@/components/ui/button/index.ts'
 </script>
 
 <template>
-  <div class="sticky top-0 flex items-center p-2 pr-4 bg-background border-b">
+  <div class="fixed top-0 w-full flex items-center p-2 pr-4 bg-background border-b">
     <div class="flex items-center flex-1">
-      <Profiler />
+      <!-- <Profiler /> -->
       <Menus />
     </div>
 

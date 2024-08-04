@@ -3,7 +3,7 @@ import { SETTINGS_MENUS } from '@/constants/layout'
 </script>
 
 <template>
-  <div class="space-y-6 px-12 overflow-auto">
+  <div class="h-full px-4 md:px-16 overflow-auto">
     <div class="py-6 border-b">
       <h2 class="text-2xl font-bold tracking-tight">
         Settings
@@ -13,9 +13,9 @@ import { SETTINGS_MENUS } from '@/constants/layout'
       </p>
     </div>
 
-    <div class="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
+    <div class="flex flex-col pt-6 space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
       <aside class="lg:w-1/5">
-        <nav class="flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1">
+        <nav class="flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1 overflow-auto">
           <RouterLink
             v-for="menu of SETTINGS_MENUS"
             :key="menu.link"
@@ -28,8 +28,10 @@ import { SETTINGS_MENUS } from '@/constants/layout'
         </nav>
       </aside>
 
-      <div class="flex-1 pb-20 lg:max-w-2xl">
-        <RouterView />
+      <div class="pb-20 h-full overflow-auto">
+        <div class="lg:max-w-2xl">
+          <RouterView />
+        </div>
       </div>
     </div>
   </div>

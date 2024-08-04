@@ -3,6 +3,10 @@ export function calculateStringByteSize(str: string | object) {
     str = JSON.stringify(str)
   }
 
+  if (!str) {
+    return 0
+  }
+
   let size = 0
   for (let i = 0; i < str.length; i++) {
     const code = str.charCodeAt(i)
@@ -17,6 +21,7 @@ export function calculateStringByteSize(str: string | object) {
       size += 3 // 其他非ASCII字符占3个字节
     }
   }
+
   return size
 }
 

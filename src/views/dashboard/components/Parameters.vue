@@ -3,8 +3,8 @@ const modelValue = defineModel<string>()
 
 const BODY_TYPE = [
   'Raw',
-  'FormData',
-  'GraphQL',
+  // 'FormData',
+  // 'GraphQL',
 ]
 </script>
 

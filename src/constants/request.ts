@@ -1,6 +1,7 @@
 // import type { InjectionKey } from 'vue'
 import localforage from 'localforage'
-import type { RequestDetail } from '@/types/request'
+import { cloneDeep } from 'es-toolkit'
+import type { RequestDetails } from '@/types/request'
 
 export const REQUEST_METHODS = [
   'GET',
@@ -32,9 +33,9 @@ function getDefaultConfig() {
 }
 
 export function getCurrentRequest() {
-  return new Promise<RequestDetail>((resolve) => {
+  return new Promise<RequestDetails>((resolve) => {
     localforage
-      .getItem<RequestDetail>('currentRequest')
+      .getItem<RequestDetails>('currentRequest')
       .then((res) => {
         if (!res) {
           res = {
@@ -51,8 +52,8 @@ export function getCurrentRequest() {
   })
 }
 
-export function setCurrentRequest(request: RequestDetail) {
-  localforage.setItem('currentRequest', request)
+export function setCurrentRequest(request: RequestDetails) {
+  localforage.setItem('currentRequest', cloneDeep(request))
 }
 
 export function getLocaleHeaders() {
