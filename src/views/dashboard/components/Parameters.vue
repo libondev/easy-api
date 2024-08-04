@@ -9,8 +9,8 @@ const BODY_TYPE = [
 </script>
 
 <template>
-  <div class="">
-    <RadioGroup :default-value="BODY_TYPE[0]" class="flex items-center justify-center pt-1.5 pb-3 gap-6">
+  <div class="flex gap-4">
+    <RadioGroup :default-value="BODY_TYPE[0]" class="flex-col pt-4 w-24 min-w-24">
       <div v-for="type of BODY_TYPE" :key="type" class="flex items-center gap-x-1">
         <RadioGroupItem :id="type" :value="type" />
         <Label :for="type" class="cursor-pointer">{{ type }}</Label>

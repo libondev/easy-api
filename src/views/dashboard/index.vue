@@ -21,9 +21,14 @@ import {
   // SIDEBAR_PANEL_VISIBLE_DEFAULT_VALUE,
   // SIDEBAR_PANEL_VISIBLE_KEY,
 } from '@/constants/layout'
+import type {
+  RequestConfigures,
+} from '@/constants/request'
 import {
   DEFAULT_REQUEST_CONFIG_INJECTION_KEY,
+  getCurrentRequest,
   getLocaleHeaders,
+  setCurrentRequest,
 } from '@/constants/request'
 
 import type { RequestDetail, RequestStatus } from '@/types/request'
@@ -50,12 +55,7 @@ const panelDirection = useStorage<PanelDirection>(
 
 const requestConfigs = inject(DEFAULT_REQUEST_CONFIG_INJECTION_KEY)!
 
-const requestDetails = ref<RequestDetail>({
-  url: '#{value:EXAMPLE,key:https://jsonplaceholder.typicode.com}/todos/1',
-  body: null,
-  headers: [],
-  queries: [],
-})
+const requestDetails = ref({} as RequestDetail)
 
 const requestResult = shallowRef('')
 const requestStatus = shallowRef({} as RequestStatus)
@@ -77,7 +77,8 @@ function onSendRequest() {
 
   const _queryString = getQueryStringFromObject(formatRequestOptions(requestDetails.value.queries))
 
-  console.info('🥑dashboard/index.vue:83/[requestDetails.value.body]:\n ', requestDetails.value.body)
+  setCurrentRequest(toRaw(requestDetails.value))
+
   fetch(requestUrl + _queryString, {
     ...requestConfigs.value,
     body: requestDetails.value.body,
@@ -117,12 +118,23 @@ function onCancelRequest() {
   requestPending.value = false
 }
 
+// merge common headers
+function updateRequestHeaders(currentHeaders: RequestConfigures, commonHeaders: RequestConfigures) {
+  console.info('🎡dashboard/index.vue:120/[currentHeaders, commonHeaders]:\n ', currentHeaders, commonHeaders)
+  // todo
+}
+
 onMounted(async () => {
-  requestDetails.value.headers = await getLocaleHeaders()
+  // get basic config
+  requestDetails.value = await getCurrentRequest()
+
+  // merge current headers and common headers
+  updateRequestHeaders(requestDetails.value.headers ?? [], await getLocaleHeaders())
 })
 
 onBeforeUnmount(() => {
   onCancelRequest()
+  setCurrentRequest(requestDetails.value)
 })
 </script>
 

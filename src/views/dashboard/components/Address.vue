@@ -57,6 +57,16 @@ function destroyMentions() {
 
 getLocaleEnvironments().then(initMentions)
 
+const unwatch = watch(modelValue, (nv) => {
+  // The first load may not get the cache yet
+  if (!nv) {
+    return
+  }
+
+  mentionsRef.set('value', nv!)
+  Promise.resolve().then(unwatch)
+})
+
 onBeforeUnmount(() => {
   destroyMentions()
 })
