@@ -52,7 +52,7 @@ const requestConfig = inject(DEFAULT_REQUEST_CONFIG_INJECTION_KEY)!
 const requestQueries = ref<RequestHeaders>([])
 const requestHeader = ref<RequestHeaders>([])
 const requestDetail = ref<RequestDetail>({
-  url: '#{name:EXAMPLE,id:https://jsonplaceholder.typicode.com}/todos/1',
+  url: '#{value:EXAMPLE,key:https://jsonplaceholder.typicode.com}/todos/1',
 })
 const requestStatus = shallowRef({} as RequestStatus)
 const requestResult = shallowRef('')

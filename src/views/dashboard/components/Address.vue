@@ -12,10 +12,6 @@ const inputRef = shallowRef<HTMLElement>()
 
 const modelValue = defineModel<string>()
 
-function onChange(value: string) {
-  modelValue.value = value.trim()
-}
-
 function onKeydownEnter(event: KeyboardEvent) {
   if (event.code !== 'Enter')
     return
@@ -36,7 +32,9 @@ function initMentions(environmentList: RequestEnvironments) {
     options: environmentList,
   })
 
-  mentionsRef.on('change', onChange)
+  mentionsRef.on('change', (value: string) => {
+    modelValue.value = value.trim()
+  })
 
   mentionsRef.mount(inputRef.value!)
 
@@ -53,7 +51,7 @@ function destroyMentions() {
   // @ts-expect-error
   inputRef.value!.querySelector('.vanilla-mentions__input')?.removeEventListener('keydown', onKeydownEnter)
 
-  mentionsRef!.off('change', onChange)
+  mentionsRef!.clear()
   mentionsRef!.destroy()
 }
 

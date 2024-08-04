@@ -23,7 +23,7 @@ export const SETTINGS_MENUS = [
     link: '/settings/sessions',
   },
   {
-    label: 'RequestEnvironments',
+    label: 'Environments',
     icon: 'i-carbon-ibm-z-environments-dev-sec-ops',
     link: '/settings/environments',
   },

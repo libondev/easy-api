@@ -50,7 +50,7 @@ export function setLocaleHeaders(headers: RequestHeaders) {
   localforage.setItem('headersConfig', headers)
 }
 
-export type RequestEnvironments = Array<{ name: string, id: string }>
+export type RequestEnvironments = Array<{ value: string, key: string }>
 
 export function getLocaleEnvironments() {
   return new Promise<RequestEnvironments>((resolve) => {
@@ -58,7 +58,7 @@ export function getLocaleEnvironments() {
       .getItem<RequestEnvironments>('environmentsConfig')
       .then((res) => {
         if (!res) {
-          res = [{ name: 'EXAMPLE', id: 'https://jsonplaceholder.typicode.com' }]
+          res = [{ key: 'EXAMPLE', value: 'https://jsonplaceholder.typicode.com' }]
           setLocaleEnvironments(res)
         }
 
