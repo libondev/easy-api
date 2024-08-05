@@ -28,6 +28,8 @@ function initMentions(environmentList: RequestEnvironments) {
   mentionsRef = createMentions({
     prefix: '#',
     suffix: '',
+    labelFieldName: 'key',
+    valueFieldName: 'value',
     value: modelValue.value,
     options: environmentList,
   })

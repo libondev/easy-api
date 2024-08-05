@@ -39,7 +39,7 @@ export function getCurrentRequest() {
       .then((res) => {
         if (!res) {
           res = {
-            url: '#{value:EXAMPLE,key:https://jsonplaceholder.typicode.com}/todos/1',
+            url: '#{key:EXAMPLE,value:https://jsonplaceholder.typicode.com}/todos/1',
             body: null,
             headers: [],
             queries: [],

@@ -5,7 +5,7 @@ export function formatRequestAddress(url: string) {
     return ''
   }
 
-  return url.replace(/#\{.*?key:(.*?)\}/g, '$1')
+  return url.replace(/#\{.*?value:(.*?)\}/g, '$1')
 }
 
 export function formatRequestOptions(headers?: RequestConfigures) {

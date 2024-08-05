@@ -23,7 +23,7 @@ const onUpdateEnvs = debounce(() => {
 
 const tableColumns: ITableColumn[] = [
   {
-    title: 'Name',
+    title: 'Key',
     field: 'key',
     renderCell: ({ row }) => h(Input, {
       'name': Math.random(),
