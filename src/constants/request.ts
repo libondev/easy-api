@@ -15,7 +15,12 @@ export const REQUEST_METHODS = [
 
 export const DEFAULT_REQUEST_CONFIG_INJECTION_KEY = 'defaultConfig' as unknown as InjectionKey<Ref<RequestInit>>
 
-export interface RequestConfigure { key: string, value: string, enable: boolean }
+export interface RequestConfigure {
+  key: string
+  value: string
+  enable: boolean
+  dataType?: 'string' | 'object' | 'array' | 'number' | 'boolean'
+}
 export type RequestConfigures = RequestConfigure[]
 
 export type RequestEnvironments = Array<{ value: string, key: string }>

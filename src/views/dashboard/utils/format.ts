@@ -1,3 +1,5 @@
+import { stringify } from 'qs'
+import { set } from 'es-toolkit/compat'
 import type { RequestConfigures } from '@/constants/request'
 
 export function formatRequestAddress(url: string) {
@@ -13,9 +15,16 @@ export function formatRequestOptions(headers?: RequestConfigures) {
     return
   }
 
-  return headers.reduce((map, item) => {
-    if (item.enable) {
-      map[item.key] = item.value
+  return headers.reduce((map, { enable, key, value, dataType = 'string' }) => {
+    if (enable) {
+      if (dataType !== 'string') {
+        try {
+          value = JSON.parse(value)
+        } catch {}
+      }
+
+      // map[key] = value
+      set(map, key, value)
     }
 
     return map
@@ -27,10 +36,10 @@ export function getQueryStringFromObject(queries?: Record<string, any>) {
     return ''
   }
 
-  const _params = new URLSearchParams(queries)
+  const queryString = stringify(queries)
 
-  if (_params.size) {
-    return `?${_params.toString()}`
+  if (queryString) {
+    return `?${queryString}`
   }
 
   return ''

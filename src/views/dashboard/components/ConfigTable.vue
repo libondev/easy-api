@@ -5,6 +5,11 @@ import type { RequestConfigure } from '@/constants/request.ts'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+
+const props = defineProps<{
+  enableDataType?: boolean
+}>()
 
 interface InternalHeaderType extends RequestConfigure {
   isCustom?: boolean
@@ -30,7 +35,7 @@ const tableColumns: ITableColumn[] = [
     title: 'Key',
     field: 'key',
     renderCell: ({ row }) => h(Input, {
-      'name': Math.random(),
+      'name': String(Math.random()),
       'readonly': !row.isCustom,
       'class': row.enable ? '' : 'opacity-50',
       'modelValue': row.key,
@@ -43,7 +48,7 @@ const tableColumns: ITableColumn[] = [
     title: 'Value',
     field: 'value',
     renderCell: ({ row }) => h(Input, {
-      'name': Math.random(),
+      'name': String(Math.random()),
       'readonly': !row.isCustom,
       'class': row.enable ? '' : 'opacity-50',
       'modelValue': row.value,
@@ -72,6 +77,36 @@ const tableColumns: ITableColumn[] = [
     }, () => [h('i', { class: 'i-carbon-trash-can' })]),
   },
 ]
+
+const dataTypeColumn = {
+  title: 'DataType',
+  field: 'dataType',
+  width: 110,
+  renderCell: ({ row }) => h(Select, {
+    'name': String(Math.random()),
+    'readonly': !row.isCustom,
+    'class': row.enable ? '' : 'opacity-50',
+    'defaultValue': 'string',
+    'modelValue': row.dataType,
+    'onUpdate:modelValue': (value) => {
+      row.dataType = value
+    },
+  }, () => [
+    h(SelectTrigger, null, () => [h(SelectValue)]),
+    h(SelectContent, null, () => [
+      h(SelectItem, { label: 'String', value: 'string' }),
+      h(SelectItem, { label: 'Number', value: 'number' }),
+      h(SelectItem, { label: 'Boolean', value: 'boolean' }),
+      h(SelectItem, { label: 'Object', value: 'object' }),
+      h(SelectItem, { label: 'Array', value: 'array' }),
+    ]),
+  ]),
+}
+
+// enable dataType column
+if (props.enableDataType) {
+  tableColumns.splice(2, 0, dataTypeColumn)
+}
 
 function onCreateClick() {
   modelValueList.value.push({

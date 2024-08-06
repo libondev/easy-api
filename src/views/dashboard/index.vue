@@ -124,15 +124,23 @@ function updateRequestHeaders(currentHeaders: RequestConfigures, commonHeaders: 
 
   const headers: RequestConfigures = [...currentHeaders]
 
-  commonHeaders.forEach((h) => {
-    // Attach public, but do not enable.
-    if (!currentHeadersMap[h.key]) {
-      headers.push({
-        ...h,
-        enable: false,
-      })
-    }
-  })
+  if (commonHeaders.length === 0) {
+    return headers
+  }
+
+  if (currentHeaders.length === 0) {
+    headers.push(...commonHeaders)
+  } else {
+    commonHeaders.forEach((h) => {
+      // Attach public, but do not enable.
+      if (!currentHeadersMap[h.key]) {
+        headers.push({
+          ...h,
+          enable: false,
+        })
+      }
+    })
+  }
 
   return headers
 }

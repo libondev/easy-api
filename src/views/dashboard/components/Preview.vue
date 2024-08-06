@@ -28,14 +28,14 @@ function getCodeStatusColor() {
   if (code >= 200 && code < 300) {
     return 'bg-green-300'
   } else if (code >= 300 && code < 400) {
-    return 'bg-orange-300'
-  } else if (code >= 400 && code < 500) {
     return 'bg-purple-300'
+  } else if (code >= 400 && code < 500) {
+    return 'bg-orange-300'
   } else if (code >= 500) {
     return 'bg-red-300'
   }
 
-  return 'bg-gray-500'
+  return 'bg-gray-400'
 }
 
 function onCopyClick() {
@@ -68,7 +68,7 @@ function onCopyClick() {
         <Badge variant="outline" class="py-1 cursor-default">
           <i class="i-mdi-approximately-equal" />
           <span class="font-mono">{{ formattedDurations.size }}</span>
-          <span class="opacity-75 scale-75 origin-[left_90%] ml-0.5 uppercase select-none font-sans">{{ formattedDurations.unit }}</span>
+          <span class="opacity-75 scale-75 origin-[left] ml-0.5 uppercase select-none font-sans">{{ formattedDurations.unit }}</span>
         </Badge>
       </li>
 
@@ -76,7 +76,7 @@ function onCopyClick() {
         <Badge variant="outline" class="py-1 cursor-default">
           <i class="i-mdi-approximately-equal" />
           <span class="font-mono">{{ formattedBodySizes.size }}</span>
-          <span class="opacity-75 scale-75 origin-[left_90%] ml-0.5 uppercase select-none font-sans">{{ formattedBodySizes.unit }}</span>
+          <span class="opacity-75 scale-75 origin-[left] ml-0.5 uppercase select-none font-sans">{{ formattedBodySizes.unit }}</span>
         </Badge>
       </li>
     </ul>

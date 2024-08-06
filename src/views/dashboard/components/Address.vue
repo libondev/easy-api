@@ -86,12 +86,11 @@ onBeforeUnmount(() => {
 .vanilla-mentions__input {
   padding: 4px 8px;
   line-height: 23px;
-  overflow: hidden;
-  @apply relative h-8 w-full rounded-md text-nowrap border border-input bg-transparent text-[14px] shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 ring-offset-1 focus-visible:ring-ring;
+  @apply relative h-8 w-full rounded-md text-nowrap border border-input bg-transparent text-[14px] shadow-sm overflow-hidden placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 ring-offset-1 focus-visible:ring-ring;
 }
 
 .vanilla-mentions__mention {
-  @apply bg-input py-0.5 px-1 mr-1 rounded whitespace-nowrap not-italic select-none;
+  @apply bg-input py-0.5 px-1 mr-0.5 rounded whitespace-nowrap not-italic select-none;
 }
 
 .vanilla-mentions__dropdown-container {

@@ -6,7 +6,7 @@ import {
   DASHBOARD_TABS_CHECKED_KEY,
 } from '@/constants/layout'
 
-const Parameters = defineAsyncComponent(() => import('./Parameters.vue'))
+const Params = defineAsyncComponent(() => import('./Params.vue'))
 const ConfigTable = defineAsyncComponent(() => import('./ConfigTable.vue'))
 
 const requestBody = defineModel<any>('body', { default: '' })
@@ -37,10 +37,10 @@ const checkedTabs = useStorage<string>(
       <ConfigTable v-model="requestHeaders" />
     </TabsContent>
     <TabsContent value="query">
-      <ConfigTable v-model="requestQueries" />
+      <ConfigTable v-model="requestQueries" enable-data-type />
     </TabsContent>
     <TabsContent value="params">
-      <Parameters v-model="requestBody" />
+      <Params v-model="requestBody" />
     </TabsContent>
   </Tabs>
 </template>

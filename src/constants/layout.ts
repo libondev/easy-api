@@ -20,11 +20,11 @@ export const SETTINGS_MENUS = [
     icon: 'i-mdi-code-braces',
     link: '/settings/headers',
   },
-  {
-    label: 'Sessions',
-    icon: 'i-carbon-prompt-session',
-    link: '/settings/sessions',
-  },
+  // {
+  //   label: 'Sessions',
+  //   icon: 'i-carbon-prompt-session',
+  //   link: '/settings/sessions',
+  // },
   {
     label: 'Environments',
     icon: 'i-carbon-ibm-z-environments-dev-sec-ops',
