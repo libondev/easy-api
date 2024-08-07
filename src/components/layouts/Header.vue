@@ -18,7 +18,7 @@ import { buttonVariants } from '@/components/ui/button/index.ts'
 
       <Document />
 
-      <a href="https://github.com/libondev/requester" target="_blank" :class="buttonVariants({ variant: 'ghost', size: 'icon' })">
+      <a href="https://github.com/libondev/eazy-api" target="_blank" :class="buttonVariants({ variant: 'ghost', size: 'icon' })">
         <i class="i-carbon-logo-github text-lg" />
       </a>
     </div>

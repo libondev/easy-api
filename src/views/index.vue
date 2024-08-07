@@ -1,7 +1,7 @@
 <route>
   redirect: /dashboard
   meta:
-    title: Requester
+    title: Easy API
 </route>
 
 <!-- eslint-disable-next-line vue/valid-template-root -->

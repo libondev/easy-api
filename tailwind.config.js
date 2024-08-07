@@ -26,7 +26,7 @@ export default {
     extend: {
       fontFamily: {
         sans: 'Geist,Inter,Helvetica, Arial, sans-serif',
-        mono: '"JetBrains Mono",Hack,Menlo,"Courier New",Courier,monospace',
+        mono: '"JetBrains Mono",Hack,ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace',
       },
       colors: {
         border: 'hsl(var(--border))',

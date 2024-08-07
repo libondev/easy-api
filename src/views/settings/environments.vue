@@ -1,6 +1,6 @@
 <route>
   meta:
-    title: RequestEnvironments
+    title: Environments
 </route>
 
 <script lang="ts" setup>
