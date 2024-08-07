@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
 import { getLocaleHeaders, setLocaleHeaders } from '@/constants/request'
 import type { ITableColumn } from '@/components/ui/table'
-import type { RequestConfigures } from '@/constants/request'
+import type { RequestConfigures } from '@/types/request'
 
 const headers = ref<RequestConfigures>([])
 

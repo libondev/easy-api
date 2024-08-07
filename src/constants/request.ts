@@ -1,7 +1,7 @@
 // import type { InjectionKey } from 'vue'
 import localforage from 'localforage'
-import { cloneDeep } from 'es-toolkit'
-import type { RequestDetails } from '@/types/request'
+import { cloneDeep } from 'es-toolkit/compat'
+import type { RequestConfigures, RequestDetails, RequestEnvironments } from '@/types/request'
 
 export const REQUEST_METHODS = [
   'GET',
@@ -14,16 +14,6 @@ export const REQUEST_METHODS = [
 ] as const
 
 export const DEFAULT_REQUEST_CONFIG_INJECTION_KEY = 'defaultConfig' as unknown as InjectionKey<Ref<RequestInit>>
-
-export interface RequestConfigure {
-  key: string
-  value: string
-  enable: boolean
-  dataType?: 'string' | 'object' | 'array' | 'number' | 'boolean'
-}
-export type RequestConfigures = RequestConfigure[]
-
-export type RequestEnvironments = Array<{ value: string, key: string }>
 
 function getDefaultConfig() {
   const config: RequestInit = {

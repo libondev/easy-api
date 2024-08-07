@@ -1,15 +1,14 @@
 <script lang="ts" setup>
 import { useStorage } from '@vueuse/core'
-import type { RequestConfigures } from '@/constants/request.ts'
+import type { RequestConfigures } from '@/types/request'
 import {
   DASHBOARD_TABS_CHECKED_DEFAULT_VALUE,
   DASHBOARD_TABS_CHECKED_KEY,
 } from '@/constants/layout'
 
 const Params = defineAsyncComponent(() => import('./Params.vue'))
-const ConfigTable = defineAsyncComponent(() => import('./ConfigTable.vue'))
+const ConfTable = defineAsyncComponent(() => import('./ConfTable.vue'))
 
-const requestBody = defineModel<any>('body', { default: '' })
 const requestHeaders = defineModel<RequestConfigures>('headers', { default: [] })
 const requestQueries = defineModel<RequestConfigures>('queries', { default: [] })
 
@@ -17,6 +16,14 @@ const checkedTabs = useStorage<string>(
   DASHBOARD_TABS_CHECKED_KEY,
   DASHBOARD_TABS_CHECKED_DEFAULT_VALUE,
 )
+
+const queriesDataTypes = [
+  'string',
+  'number',
+  'boolean',
+  'array',
+  'object',
+]
 </script>
 
 <template>
@@ -34,13 +41,13 @@ const checkedTabs = useStorage<string>(
     </TabsList>
 
     <TabsContent value="header">
-      <ConfigTable v-model="requestHeaders" />
+      <ConfTable v-model="requestHeaders" />
     </TabsContent>
     <TabsContent value="query">
-      <ConfigTable v-model="requestQueries" enable-data-type />
+      <ConfTable v-model="requestQueries" :data-types="queriesDataTypes" />
     </TabsContent>
     <TabsContent value="params">
-      <Params v-model="requestBody" />
+      <Params />
     </TabsContent>
   </Tabs>
 </template>

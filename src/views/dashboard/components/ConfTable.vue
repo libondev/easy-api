@@ -1,14 +1,14 @@
 <script lang="ts" setup>
 import { h } from 'vue'
-import type { ITableColumn } from '@/components/ui/table/index.ts'
-import type { RequestConfigure } from '@/constants/request.ts'
+import type { ITableColumn } from '@/components/ui/table'
+import type { RequestConfigure } from '@/types/request'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 const props = defineProps<{
-  enableDataType?: boolean
+  dataTypes?: string[]
 }>()
 
 interface InternalHeaderType extends RequestConfigure {
@@ -78,33 +78,26 @@ const tableColumns: ITableColumn[] = [
   },
 ]
 
-const dataTypeColumn = {
-  title: 'DataType',
-  field: 'dataType',
-  width: 110,
-  renderCell: ({ row }) => h(Select, {
-    'name': String(Math.random()),
-    'readonly': !row.isCustom,
-    'class': row.enable ? '' : 'opacity-50',
-    'defaultValue': 'string',
-    'modelValue': row.dataType,
-    'onUpdate:modelValue': (value) => {
-      row.dataType = value
-    },
-  }, () => [
-    h(SelectTrigger, null, () => [h(SelectValue)]),
-    h(SelectContent, null, () => [
-      h(SelectItem, { label: 'String', value: 'string' }),
-      h(SelectItem, { label: 'Number', value: 'number' }),
-      h(SelectItem, { label: 'Boolean', value: 'boolean' }),
-      h(SelectItem, { label: 'Object', value: 'object' }),
-      h(SelectItem, { label: 'Array', value: 'array' }),
+if (props.dataTypes?.length) {
+  const dataTypeColumn: ITableColumn = {
+    title: 'DataType',
+    field: 'dataType',
+    width: 110,
+    renderCell: ({ row }) => h(Select, {
+      'name': String(Math.random()),
+      'readonly': !row.isCustom,
+      'class': row.enable ? '' : 'opacity-50',
+      'defaultValue': 'string',
+      'modelValue': row.dataType,
+      'onUpdate:modelValue': (value) => {
+        row.dataType = value
+      },
+    }, () => [
+      h(SelectTrigger, null, () => [h(SelectValue)]),
+      h(SelectContent, null, () => props.dataTypes!.map(type => h(SelectItem, { label: type, value: type }))),
     ]),
-  ]),
-}
+  }
 
-// enable dataType column
-if (props.enableDataType) {
   tableColumns.splice(2, 0, dataTypeColumn)
 }
 

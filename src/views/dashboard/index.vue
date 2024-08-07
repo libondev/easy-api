@@ -24,7 +24,9 @@ import {
 import type {
   RequestConfigure,
   RequestConfigures,
-} from '@/constants/request'
+  RequestDetails,
+  RequestResults,
+} from '@/types/request'
 import {
   DEFAULT_REQUEST_CONFIG_INJECTION_KEY,
   getCurrentRequest,
@@ -32,7 +34,6 @@ import {
   setCurrentRequest,
 } from '@/constants/request'
 
-import type { RequestDetails, RequestResults } from '@/types/request'
 import type { PanelDirection/* , SidebarVisible */ } from '@/types/layout'
 
 const Configure = defineAsyncComponent(() => import('./components/Configure.vue'))
@@ -70,20 +71,21 @@ function onSendRequest() {
     return
   }
 
-  _startAt = Date.now()
   _abortController = new AbortController()
   requestPending.value = true
 
+  const headers = formatRequestOptions(requestDetails.value.headers)
+  const queryString = getQueryStringFromObject(formatRequestOptions(requestDetails.value.queries))
+
   setCurrentRequest(requestDetails.value)
 
-  const _queryString = getQueryStringFromObject(formatRequestOptions(requestDetails.value.queries))
-
-  fetch(requestUrl + _queryString, {
+  _startAt = Date.now()
+  fetch(requestUrl + queryString, {
     ...requestConfigs.value,
     body: requestDetails.value.body,
     signal: _abortController.signal,
     method: requestDetails.value.method,
-    headers: formatRequestOptions(requestDetails.value.headers),
+    headers,
   })
     .then(async (res) => {
       const durations = Date.now() - _startAt
@@ -145,15 +147,19 @@ function updateRequestHeaders(currentHeaders: RequestConfigures, commonHeaders: 
   return headers
 }
 
+provide('requestDetails', requestDetails)
+
 onMounted(async () => {
   // get basic config
-  requestDetails.value = await getCurrentRequest()
+  const currentRequest = await getCurrentRequest()
 
   // merge current headers and common headers
-  requestDetails.value.headers = updateRequestHeaders(
-    requestDetails.value.headers ?? [],
+  currentRequest.headers = updateRequestHeaders(
+    currentRequest.headers ?? [],
     await getLocaleHeaders(),
   )
+
+  requestDetails.value = currentRequest
 })
 
 onBeforeUnmount(() => {
@@ -179,7 +185,6 @@ onBeforeUnmount(() => {
         />
 
         <Configure
-          v-model:body="requestDetails.body"
           v-model:headers="requestDetails.headers"
           v-model:queries="requestDetails.queries"
         />

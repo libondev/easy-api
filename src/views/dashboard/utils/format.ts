@@ -1,6 +1,6 @@
 import { stringify } from 'qs'
 import { set } from 'es-toolkit/compat'
-import type { RequestConfigures } from '@/constants/request'
+import type { RequestConfigures } from '@/types/request'
 
 export function formatRequestAddress(url: string) {
   if (!url) {

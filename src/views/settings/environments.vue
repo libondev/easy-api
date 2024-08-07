@@ -7,7 +7,7 @@
 import { h } from 'vue'
 import { debounce } from 'es-toolkit'
 
-import type { RequestEnvironments } from '@/constants/request'
+import type { RequestEnvironments } from '@/types/request'
 import { getLocaleEnvironments, setLocaleEnvironments } from '@/constants/request'
 
 import { Input } from '@/components/ui/input'

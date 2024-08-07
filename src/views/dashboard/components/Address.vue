@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { createMentions } from 'mentions.js'
 
-import type { RequestEnvironments } from '@/constants/request'
 import { getLocaleEnvironments } from '@/constants/request'
+import type { RequestEnvironments } from '@/types/request'
 
 const emits = defineEmits<{
   (e: 'submit'): void
