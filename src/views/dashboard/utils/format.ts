@@ -1,6 +1,6 @@
 import { stringify } from 'qs'
 import { set } from 'es-toolkit/compat'
-import type { RequestConfigures } from '@/types/request'
+import type { RequestConfigures, RequestDetails } from '@/types/request'
 
 export function formatRequestAddress(url: string) {
   if (!url) {
@@ -31,7 +31,27 @@ export function formatRequestOptions(headers?: RequestConfigures) {
   }, {} as Record<string, string>)
 }
 
-export function getQueryStringFromObject(queries?: Record<string, any>) {
+export function formatRequestBody(body?: any, type: RequestDetails['bodyType'] = 'Text') {
+  if (!body) {
+    return
+  }
+
+  switch (type) {
+    case 'Text':
+      return body
+
+    case 'JSON':
+      return formatRequestOptions(body)
+
+    case 'FormUrlencoded':
+      return null
+
+    default:
+      return null
+  }
+}
+
+export function transformToQueryString(queries?: Record<string, any>) {
   if (!queries) {
     return ''
   }

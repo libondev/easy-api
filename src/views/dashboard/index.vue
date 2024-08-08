@@ -12,8 +12,9 @@ import Preview from './components/Preview.vue'
 
 import {
   formatRequestAddress,
+  formatRequestBody,
   formatRequestOptions,
-  getQueryStringFromObject,
+  transformToQueryString,
 } from './utils/format'
 import {
   PREVIEW_PANEL_POSITION_DEFAULT_VALUE,
@@ -65,27 +66,29 @@ let _startAt: number
 let _abortController: AbortController
 
 function onSendRequest() {
-  const requestUrl = formatRequestAddress(requestDetails.value.url?.trim())
+  const { url, headers, queries, method, body, bodyType } = requestDetails.value
+  const requestUrl = formatRequestAddress(url?.trim())
 
   if (!requestUrl || requestPending.value) {
     return
   }
 
-  _abortController = new AbortController()
-  requestPending.value = true
-
-  const headers = formatRequestOptions(requestDetails.value.headers)
-  const queryString = getQueryStringFromObject(formatRequestOptions(requestDetails.value.queries))
-
   setCurrentRequest(requestDetails.value)
+
+  requestPending.value = true
+  _abortController = new AbortController()
+
+  const formattedBody = formatRequestBody(body, bodyType)
+  const formattedHeaders = formatRequestOptions(headers)
+  const queryString = transformToQueryString(formatRequestOptions(queries))
 
   _startAt = Date.now()
   fetch(requestUrl + queryString, {
     ...requestConfigs.value,
-    body: requestDetails.value.body,
+    method,
+    body: formattedBody,
     signal: _abortController.signal,
-    method: requestDetails.value.method,
-    headers,
+    headers: formattedHeaders,
   })
     .then(async (res) => {
       const durations = Date.now() - _startAt
