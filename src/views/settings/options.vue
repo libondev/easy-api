@@ -4,7 +4,6 @@
 </route>
 
 <script lang="ts" setup>
-import { toast } from 'vue-sonner'
 import {
   DEFAULT_REQUEST_CONFIG_INJECTION_KEY,
   setLocaleDefaultConfig,
@@ -70,7 +69,7 @@ const formItems = [
 
 function onUpdatePreferences() {
   setLocaleDefaultConfig(toRaw(defaultConfig.value))
-  toast('Updated preferences successful.')
+  useToast('Updated preferences successful.')
 }
 </script>
 

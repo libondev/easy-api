@@ -53,6 +53,7 @@ const tableColumns: ITableColumn[] = [
     cellClass: 'text-center',
     renderCell: ({ row }) => h(Switch, {
       'checked': row.enable,
+      'title': 'Non-enabled header do not appear in the table.',
       'onUpdate:checked': (value) => {
         row.enable = value
         onUpdateEnvs()

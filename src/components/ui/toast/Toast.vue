@@ -15,7 +15,7 @@ const TOAST_OPTIONS = {
 
 <template>
   <Sonner
-    class="toaster group"
+    class="toaster font-sans group"
     v-bind="props"
     :toast-options="TOAST_OPTIONS"
   />

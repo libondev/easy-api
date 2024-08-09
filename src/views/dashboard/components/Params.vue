@@ -33,14 +33,18 @@ const configRenderComponent = computed(() => {
 })
 
 function toggleRequestBodyDataType(type: string) {
+  const isBodyNonEmpty = requestDetails.value.body?.length > 0
+
+  if (isBodyNonEmpty) {
+    useToast.info('Request body has been reset due to data type switching.')
+  }
+
   if (type === 'JSON') {
     requestDetails.value.body = []
   } else if (type === 'Text') {
     requestDetails.value.body = ''
   }
 }
-
-toggleRequestBodyDataType(requestDetails.value.bodyType!)
 </script>
 
 <template>

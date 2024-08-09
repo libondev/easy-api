@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { useToggle } from '@vueuse/core'
-import { toast } from 'vue-sonner'
 import { formatTimestampWithUnit } from '@/utils/parsers/date'
 import { calculateStringByteSize, formatStringSizeWithUnit } from '@/utils/parsers/string'
 
@@ -41,9 +40,9 @@ function getCodeStatusColor() {
 function onCopyClick() {
   navigator.clipboard.writeText(props.result.text)
     .then(() => {
-      toast('Copied response body successful.')
+      useToast('Copied response body successful.')
     }).catch(() => {
-      toast('Copy failed, please try to copy manually.')
+      useToast('Copy failed, please try to copy manually.')
     })
 }
 </script>

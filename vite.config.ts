@@ -46,8 +46,19 @@ export default defineConfig(({ mode }) => ({
   },
 
   optimizeDeps: {
-    include: ['vue', 'pinia', 'vue-router', 'class-variance-authority', 'radix-vue', 'clsx', 'tailwind-merge', 'es-toolkit'],
     exclude: ['vue-demi'],
+    include: [
+      'vue',
+      'pinia',
+      'vue-router',
+      'class-variance-authority',
+      'radix-vue',
+      'clsx',
+      'tailwind-merge',
+      'es-toolkit',
+      'qs',
+      'mentions.js',
+    ],
   },
 
   plugins: [
@@ -95,6 +106,7 @@ export default defineConfig(({ mode }) => ({
       imports: [
         'vue',
         'vue-router',
+        { 'vue-sonner': [['toast', 'useToast']] },
       ],
     }),
   ],

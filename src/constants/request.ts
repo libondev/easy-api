@@ -57,7 +57,11 @@ export function getLocaleHeaders() {
       .getItem<RequestConfigures>('headersConfig')
       .then((res) => {
         if (!res) {
-          res = [{ key: 'Content-Type', value: 'application/json; charset=UTF-8', enable: true }]
+          res = [
+            { key: 'Content-Type', value: 'application/json; charset=UTF-8', enable: true },
+            { key: 'Content-Type', value: 'application/x-www-form-urlencoded', enable: false },
+            { key: 'Content-Type', value: 'multipart/form-data', enable: false },
+          ]
           setLocaleHeaders(res)
         }
 

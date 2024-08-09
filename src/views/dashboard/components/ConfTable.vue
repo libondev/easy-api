@@ -49,6 +49,7 @@ const tableColumns: ITableColumn[] = [
     field: 'value',
     renderCell: ({ row }) => h(Input, {
       'name': String(Math.random()),
+      'type': row.dataType === 'file' ? 'file' : 'text',
       'readonly': !row.isCustom,
       'class': row.enable ? '' : 'opacity-50',
       'modelValue': row.value,
@@ -93,8 +94,8 @@ if (props.dataTypes?.length) {
         row.dataType = value
       },
     }, () => [
-      h(SelectTrigger, null, () => [h(SelectValue)]),
-      h(SelectContent, null, () => props.dataTypes!.map(type => h(SelectItem, { label: type, value: type }))),
+      h(SelectTrigger, { class: 'capitalize' }, () => [h(SelectValue)]),
+      h(SelectContent, null, () => props.dataTypes!.map(type => h(SelectItem, { class: 'capitalize', label: type, value: type }))),
     ]),
   }
 

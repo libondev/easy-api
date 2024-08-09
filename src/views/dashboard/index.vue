@@ -159,7 +159,8 @@ onMounted(async () => {
   // merge current headers and common headers
   currentRequest.headers = updateRequestHeaders(
     currentRequest.headers ?? [],
-    await getLocaleHeaders(),
+    // Non-enabled public headers are not added to the list.
+    (await getLocaleHeaders()).filter(h => h.enable),
   )
 
   requestDetails.value = currentRequest
