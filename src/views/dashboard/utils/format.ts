@@ -54,7 +54,7 @@ export function formatRequestBody(
       return body
 
     case 'JSON':
-      return formatRequestOptions(body)
+      return JSON.stringify(formatRequestOptions(body))
 
     // e.g. Blob/File
     case 'FormData':
