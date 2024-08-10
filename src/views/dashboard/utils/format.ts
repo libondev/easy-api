@@ -39,7 +39,7 @@ export function formatRequestBody(
   method: RequestDetails['method'] = 'GET',
   type: RequestDetails['bodyType'] = 'Text',
 ) {
-  if (!body) {
+  if (!body || !body?.length) {
     return
   }
 
