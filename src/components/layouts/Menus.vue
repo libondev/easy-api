@@ -6,7 +6,7 @@ import {
   MenubarMenu,
   MenubarTrigger,
 } from '@/components/ui/menubar'
-import { SETTINGS_MENUS } from '@/constants/layout'
+import { SETTINGS_MENUS } from '@/constants/layout.ts'
 
 const menus = [
   {
@@ -22,14 +22,14 @@ const menus = [
     to="/dashboard"
     class="py-1 px-3 rounded-sm inline-flex items-center select-none text-sm font-medium cursor-default hover:bg-accent hover:text-accent-foreground"
   >
-    <i class="i-carbon-running mr-1" />
+    <i class="i-carbon-running mr-1 text-lg" />
     Dashboard
   </RouterLink>
 
   <Menubar class="rounded-none border-none shadow-none px-2 h-8 pl-1.5">
     <MenubarMenu v-for="menu of menus" :key="menu.label">
       <MenubarTrigger class="flex items-center">
-        <i :class="menu.icon" class="mr-1" />
+        <i :class="menu.icon" class="mr-1 text-lg" />
         {{ menu.label }}
       </MenubarTrigger>
       <MenubarContent>

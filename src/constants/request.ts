@@ -1,7 +1,7 @@
 // import type { InjectionKey } from 'vue'
 import localforage from 'localforage'
 import { cloneDeep } from 'es-toolkit/compat'
-import type { RequestConfigures, RequestDetails, RequestEnvironments } from '@/types/request'
+import type { RequestConfigures, RequestDetails } from '@/types/request.ts'
 
 export const REQUEST_METHODS = [
   'GET',
@@ -13,7 +13,18 @@ export const REQUEST_METHODS = [
   'OPTIONS',
 ] as const
 
-export const DEFAULT_REQUEST_CONFIG_INJECTION_KEY = 'defaultConfig' as unknown as InjectionKey<Ref<RequestInit>>
+const LOCALE_CACHE_KEYS = {
+  CURRENT_REQUEST: 'currentRequest',
+  DEFAULT_CONFIGS: 'defaultConfigs',
+  HEADERS_CONFIGS: 'headersConfigs',
+  VARIABLES_CONFIGS: 'variablesConfigs',
+}
+
+export const DEFAULT_REQUEST_CONFIG_INJECTION_KEY = LOCALE_CACHE_KEYS.DEFAULT_CONFIGS as unknown as InjectionKey<Ref<RequestInit>>
+
+export function cleanAllLocaleCaches() {
+  localforage.clear()
+}
 
 function getDefaultConfig() {
   const config: RequestInit = {
@@ -30,12 +41,13 @@ function getDefaultConfig() {
 export function getCurrentRequest() {
   return new Promise<RequestDetails>((resolve) => {
     localforage
-      .getItem<RequestDetails>('currentRequest')
+      .getItem<RequestDetails>(LOCALE_CACHE_KEYS.CURRENT_REQUEST)
       .then((res) => {
         if (!res) {
           res = {
             url: '#{key:EXAMPLE,value:https://jsonplaceholder.typicode.com}/todos/1',
-            body: null,
+            body: '',
+            bodyType: 'Text',
             headers: [],
             queries: [],
           }
@@ -48,19 +60,19 @@ export function getCurrentRequest() {
 }
 
 export function setCurrentRequest(request: RequestDetails) {
-  localforage.setItem('currentRequest', cloneDeep(request))
+  localforage.setItem(LOCALE_CACHE_KEYS.CURRENT_REQUEST, cloneDeep(request))
 }
 
 export function getLocaleHeaders() {
   return new Promise<RequestConfigures>((resolve) => {
     localforage
-      .getItem<RequestConfigures>('headersConfig')
+      .getItem<RequestConfigures>(LOCALE_CACHE_KEYS.HEADERS_CONFIGS)
       .then((res) => {
         if (!res) {
           res = [
-            { key: 'Content-Type', value: 'application/json; charset=UTF-8', enable: true },
-            { key: 'Content-Type', value: 'application/x-www-form-urlencoded', enable: false },
-            { key: 'Content-Type', value: 'multipart/form-data', enable: false },
+            { id: '0', key: 'Content-Type', value: 'application/json; charset=UTF-8', enable: true },
+            { id: '1', key: 'Content-Type', value: 'application/x-www-form-urlencoded', enable: false },
+            { id: '2', key: 'Content-Type', value: 'multipart/form-data', enable: false },
           ]
           setLocaleHeaders(res)
         }
@@ -74,17 +86,17 @@ export function getLocaleHeaders() {
 }
 
 export function setLocaleHeaders(headers: RequestConfigures) {
-  localforage.setItem('headersConfig', headers)
+  localforage.setItem(LOCALE_CACHE_KEYS.HEADERS_CONFIGS, headers)
 }
 
-export function getLocaleDefaultConfig() {
+export function getLocaleDefaultConfigs() {
   return new Promise<RequestInit>((resolve) => {
     localforage
       .getItem<RequestInit>(DEFAULT_REQUEST_CONFIG_INJECTION_KEY as unknown as string)
       .then((res) => {
         if (!res) {
           res = getDefaultConfig()
-          setLocaleDefaultConfig(res)
+          setLocaleDefaultConfigs(res)
         }
 
         resolve(res)
@@ -92,18 +104,18 @@ export function getLocaleDefaultConfig() {
   })
 }
 
-export function setLocaleDefaultConfig(config: RequestInit) {
+export function setLocaleDefaultConfigs(config: RequestInit) {
   localforage.setItem(DEFAULT_REQUEST_CONFIG_INJECTION_KEY as unknown as string, config)
 }
 
-export function getLocaleEnvironments() {
-  return new Promise<RequestEnvironments>((resolve) => {
+export function getLocaleVariables() {
+  return new Promise<RequestConfigures>((resolve) => {
     localforage
-      .getItem<RequestEnvironments>('environmentsConfig')
+      .getItem<RequestConfigures>(LOCALE_CACHE_KEYS.VARIABLES_CONFIGS)
       .then((res) => {
         if (!res) {
-          res = [{ key: 'EXAMPLE', value: 'https://jsonplaceholder.typicode.com' }]
-          setLocaleEnvironments(res)
+          res = [{ key: 'EXAMPLE', value: 'https://jsonplaceholder.typicode.com', enable: true }]
+          setLocaleVariables(res)
         }
 
         resolve(res)
@@ -114,6 +126,6 @@ export function getLocaleEnvironments() {
   })
 }
 
-export function setLocaleEnvironments(environments: RequestEnvironments) {
-  localforage.setItem('environmentsConfig', environments)
+export function setLocaleVariables(environments: RequestConfigures) {
+  localforage.setItem(LOCALE_CACHE_KEYS.VARIABLES_CONFIGS, environments)
 }

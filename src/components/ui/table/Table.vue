@@ -30,6 +30,10 @@ type ConditionGetter = (v: D) => boolean
 
 const filterConditions = shallowRef<ConditionGetter[]>([])
 const filterData = computed(() => {
+  if (!props.data?.length) {
+    return []
+  }
+
   return props.data.filter(item => filterConditions.value.every(condition => condition(item)))
 })
 

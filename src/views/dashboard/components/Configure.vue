@@ -1,13 +1,22 @@
 <script lang="ts" setup>
 import { useStorage } from '@vueuse/core'
-import type { RequestConfigures } from '@/types/request'
+import {
+  getDataTypeColumn,
+  getEnableColumn,
+  getOperateColumn,
+  getPrimaryKeyColumn,
+  getRowValueColumn,
+  normalDataTypes,
+  onCreateClick,
+  onRemoveClick,
+} from '../utils/columns.ts'
+import Params from './Params.vue'
 import {
   DASHBOARD_TABS_CHECKED_DEFAULT_VALUE,
   DASHBOARD_TABS_CHECKED_KEY,
-} from '@/constants/layout'
+} from '@/constants/layout.ts'
 
-const Params = defineAsyncComponent(() => import('./Params.vue'))
-const ConfTable = defineAsyncComponent(() => import('./ConfTable.vue'))
+import type { RequestConfigures } from '@/types/request.ts'
 
 const requestHeaders = defineModel<RequestConfigures>('headers', { default: [] })
 const requestQueries = defineModel<RequestConfigures>('queries', { default: [] })
@@ -17,12 +26,31 @@ const checkedTabs = useStorage<string>(
   DASHBOARD_TABS_CHECKED_DEFAULT_VALUE,
 )
 
-const queriesDataTypes = [
-  'string',
-  'number',
-  'boolean',
-  'array',
-  'object',
+function setRowReadonly(row: any) {
+  return {
+    readonly: !row.isCustom,
+  }
+}
+
+const headerTableColumns = [
+  getEnableColumn(requestHeaders),
+  getPrimaryKeyColumn(setRowReadonly),
+  getRowValueColumn(setRowReadonly),
+  getOperateColumn(
+    onCreateClick(requestHeaders, () => ({ isCustom: true })),
+    onRemoveClick(requestHeaders),
+  ),
+]
+
+const queriesTableColumns = [
+  getEnableColumn(requestQueries),
+  getPrimaryKeyColumn(),
+  getDataTypeColumn(normalDataTypes),
+  getRowValueColumn(),
+  getOperateColumn(
+    onCreateClick(requestQueries),
+    onRemoveClick(requestQueries),
+  ),
 ]
 </script>
 
@@ -41,10 +69,10 @@ const queriesDataTypes = [
     </TabsList>
 
     <TabsContent value="header">
-      <ConfTable v-model="requestHeaders" />
+      <Table :index="false" :filterable="false" :data="requestHeaders" :columns="headerTableColumns" />
     </TabsContent>
     <TabsContent value="query">
-      <ConfTable v-model="requestQueries" :data-types="queriesDataTypes" />
+      <Table :index="false" :filterable="false" :data="requestQueries" :columns="queriesTableColumns" />
     </TabsContent>
     <TabsContent value="params">
       <Params />

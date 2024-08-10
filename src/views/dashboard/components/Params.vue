@@ -1,24 +1,50 @@
 <script lang="ts" setup>
 import { h } from 'vue'
-import type { RequestDetails } from '@/types/request'
+import {
+  getDataTypeColumn,
+  getEnableColumn,
+  getOperateColumn,
+  getPrimaryKeyColumn,
+  getRowValueColumn,
+  normalDataTypes,
+  onCreateClick,
+  onRemoveClick,
+} from '../utils/columns.ts'
+import { Table } from '@/components/ui/table'
 
-const requestDetails = inject('requestDetails', { value: {} }) as Ref<RequestDetails>
-const ConfTable = defineAsyncComponent(() => import('./ConfTable.vue'))
+import type { RequestDetails } from '@/types/request.ts'
+
+const requestDetails = inject('requestDetails', { value: { } }) as Ref<RequestDetails>
 
 const BODY_TYPE = [
   'Text',
   'JSON',
-  // 'FormData',
+  'FormData',
   // 'GraphQL',
 ]
 
-const configRenderComponent = computed(() => {
-  const { bodyType } = requestDetails.value
+const tableColumns = [
+  getPrimaryKeyColumn(),
+  getDataTypeColumn([...normalDataTypes, 'file']),
+  getRowValueColumn(),
+]
 
-  if (bodyType === 'JSON') {
-    return h(ConfTable, {
-      dataTypes: ['string', 'number', 'boolean', 'array', 'object', 'file'],
-      modelValue: requestDetails.value.body,
+const componentRenderer = computed(() => {
+  const { bodyType = 'Text' } = requestDetails.value
+
+  if (['JSON', 'FormData'].includes(bodyType)) {
+    return h(Table, {
+      index: false,
+      filterable: false,
+      data: requestDetails.value.body,
+      columns: [
+        getEnableColumn(requestDetails.value.body),
+        ...tableColumns,
+        getOperateColumn(
+          onCreateClick(requestDetails.value.body),
+          onRemoveClick(requestDetails.value.body),
+        ),
+      ],
     })
   }
 
@@ -32,18 +58,52 @@ const configRenderComponent = computed(() => {
   })
 })
 
-function toggleRequestBodyDataType(type: string) {
+// Allow rollback to the last data
+let _backupPrevBodyParams: any
+let _isManualSwitching = false
+
+// change "bodyType" reset "body"
+watch(() => requestDetails.value.bodyType, (newType = 'Text', oldType) => {
+  // The first change may be due to reading from cache.
+  if (!oldType || !_isManualSwitching) {
+    return
+  }
+
+  // Do compatible data structures need to be reset?
+  if (
+    (newType === 'JSON' && oldType === 'FormData') ||
+    (newType === 'FormData' && oldType === 'JSON')
+  ) {
+    return
+  }
+
   const isBodyNonEmpty = requestDetails.value.body?.length > 0
 
   if (isBodyNonEmpty) {
-    useToast.info('Request body has been reset due to data type switching.')
+    _backupPrevBodyParams = requestDetails.value.body
+
+    useToast.info('Request body has been reset due to data type switching.', {
+      action: {
+        label: 'Undo',
+        onClick: () => {
+          _isManualSwitching = false
+          requestDetails.value.bodyType = oldType
+          requestDetails.value.body = _backupPrevBodyParams
+        },
+      },
+    })
   }
 
-  if (type === 'JSON') {
+  if (['JSON', 'FormData'].includes(newType)) {
     requestDetails.value.body = []
-  } else if (type === 'Text') {
+  } else if (newType === 'Text') {
     requestDetails.value.body = ''
   }
+})
+
+// manual switching "bodyType"
+function onManualSwitching() {
+  _isManualSwitching = true
 }
 </script>
 
@@ -53,7 +113,7 @@ function toggleRequestBodyDataType(type: string) {
       v-model="requestDetails.bodyType"
       :default-value="BODY_TYPE[0]"
       class="flex-col pt-4 w-24 min-w-24"
-      @update:model-value="toggleRequestBodyDataType"
+      @update:model-value="onManualSwitching"
     >
       <div v-for="type of BODY_TYPE" :key="type" class="flex items-center gap-x-1">
         <RadioGroupItem :id="type" :value="type" />
@@ -61,6 +121,6 @@ function toggleRequestBodyDataType(type: string) {
       </div>
     </RadioGroup>
 
-    <Component :is="configRenderComponent" />
+    <Component :is="componentRenderer" />
   </div>
 </template>

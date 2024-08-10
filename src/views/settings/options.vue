@@ -1,20 +1,21 @@
 <route>
   meta:
     title: Options
+    description: Set the basic parameters of fetch function request.
 </route>
 
 <script lang="ts" setup>
 import {
   DEFAULT_REQUEST_CONFIG_INJECTION_KEY,
-  setLocaleDefaultConfig,
-} from '@/constants/request'
+  setLocaleDefaultConfigs,
+} from '@/constants/request.ts'
 
-const defaultConfig = inject(DEFAULT_REQUEST_CONFIG_INJECTION_KEY)!
+const defaultConfigs = inject(DEFAULT_REQUEST_CONFIG_INJECTION_KEY)!
 
 const previewFetchOptionsCode = computed(() => {
   let code = 'fetch(\'...\', {\n  ...,\n'
 
-  const config = defaultConfig.value
+  const config = defaultConfigs.value
   for (const key in config) {
     code += `  ${key}: '${config[key as keyof typeof config]}',\n`
   }
@@ -68,7 +69,7 @@ const formItems = [
 ] as const
 
 function onUpdatePreferences() {
-  setLocaleDefaultConfig(toRaw(defaultConfig.value))
+  setLocaleDefaultConfigs(toRaw(defaultConfigs.value))
   useToast('Updated preferences successful.')
 }
 </script>
@@ -84,7 +85,7 @@ function onUpdatePreferences() {
     <ul class="space-y-8">
       <li v-for="item of formItems" :key="item.field" class="space-y-2">
         <Label class="capitalize">{{ item.field }}</Label>
-        <Select v-model="defaultConfig[item.field]" name="form items" @update:model-value="onUpdatePreferences">
+        <Select v-model="defaultConfigs[item.field]" name="form items" @update:model-value="onUpdatePreferences">
           <SelectTrigger aria-label="Select profile" class="w-full">
             <SelectValue placeholder="Select an profile" />
           </SelectTrigger>

@@ -99,6 +99,9 @@ export default {
     animate,
     iconsPlugin({
       collections: getIconCollections(['ph', 'mdi', 'carbon', 'solar']),
+      extraProperties: {
+        'pointer-events': 'none',
+      },
     }),
   ],
 }

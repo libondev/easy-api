@@ -4,7 +4,7 @@ import { formatTimestampWithUnit } from '@/utils/parsers/date'
 import { calculateStringByteSize, formatStringSizeWithUnit } from '@/utils/parsers/string'
 
 import type { PanelDirection } from '@/types/layout'
-import type { RequestResults } from '@/types/request'
+import type { RequestResults } from '@/types/request.ts'
 
 const props = defineProps<{
   result: RequestResults
@@ -52,7 +52,7 @@ function onCopyClick() {
     <ul class="p-2 border-b border-border flex items-center gap-2">
       <li title="Toggle preview panel position">
         <Button variant="ghost" size="icon" @click="onTogglePanelDirection()">
-          <i class="size-4 pointer-events-none" :class="panelDirection === 'horizontal' ? 'i-carbon-bottom-panel-close-filled' : 'i-carbon-right-panel-close-filled'" />
+          <i class="size-4" :class="panelDirection === 'horizontal' ? 'i-carbon-bottom-panel-close-filled' : 'i-carbon-right-panel-close-filled'" />
         </Button>
       </li>
 

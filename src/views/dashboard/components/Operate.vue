@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import Address from './Address.vue'
 
-import { REQUEST_METHODS } from '@/constants/request'
-import type { RequestDetails } from '@/types/request'
+import { REQUEST_METHODS } from '@/constants/request.ts'
+import type { RequestDetails } from '@/types/request.ts'
 
 const emits = defineEmits<{
   share: []

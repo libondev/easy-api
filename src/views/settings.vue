@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { SETTINGS_MENUS } from '@/constants/layout'
+import { SETTINGS_MENUS } from '@/constants/layout.ts'
 </script>
 
 <template>

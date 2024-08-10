@@ -9,35 +9,32 @@ import { SplitterPanel } from 'radix-vue'
 import Operate from './components/Operate.vue'
 // import Sidebar from './components/Sidebar.vue'
 import Preview from './components/Preview.vue'
+import Configure from './components/Configure.vue'
 
 import {
   formatRequestAddress,
   formatRequestBody,
   formatRequestOptions,
   transformToQueryString,
-} from './utils/format'
+} from './utils/format.ts'
 import {
   PREVIEW_PANEL_POSITION_DEFAULT_VALUE,
   PREVIEW_PANEL_POSITION_KEY,
   // SIDEBAR_PANEL_VISIBLE_DEFAULT_VALUE,
   // SIDEBAR_PANEL_VISIBLE_KEY,
-} from '@/constants/layout'
+} from '@/constants/layout.ts'
 import type {
-  RequestConfigure,
-  RequestConfigures,
   RequestDetails,
   RequestResults,
-} from '@/types/request'
+} from '@/types/request.ts'
 import {
   DEFAULT_REQUEST_CONFIG_INJECTION_KEY,
   getCurrentRequest,
   getLocaleHeaders,
   setCurrentRequest,
-} from '@/constants/request'
+} from '@/constants/request.ts'
 
 import type { PanelDirection/* , SidebarVisible */ } from '@/types/layout'
-
-const Configure = defineAsyncComponent(() => import('./components/Configure.vue'))
 
 // const toggleSidebarVisibility = useStorage<SidebarVisible>(
 //   SIDEBAR_PANEL_VISIBLE_KEY,
@@ -62,6 +59,8 @@ const requestPending = shallowRef(false)
 const requestDetails = ref({} as RequestDetails)
 const requestResults = shallowRef({} as RequestResults)
 
+provide('requestDetails', requestDetails)
+
 let _startAt: number
 let _abortController: AbortController
 
@@ -78,8 +77,8 @@ function onSendRequest() {
   requestPending.value = true
   _abortController = new AbortController()
 
-  const formattedBody = formatRequestBody(body, bodyType)
-  const formattedHeaders = formatRequestOptions(headers)
+  const formattedHeader = formatRequestOptions(headers)
+  const formattedBody = formatRequestBody(body, method, bodyType)
   const queryString = transformToQueryString(formatRequestOptions(queries))
 
   _startAt = Date.now()
@@ -87,8 +86,8 @@ function onSendRequest() {
     ...requestConfigs.value,
     method,
     body: formattedBody,
+    headers: formattedHeader,
     signal: _abortController.signal,
-    headers: formattedHeaders,
   })
     .then(async (res) => {
       const durations = Date.now() - _startAt
@@ -122,46 +121,14 @@ function onCancelRequest() {
   requestPending.value = false
 }
 
-// merge common headers
-function updateRequestHeaders(currentHeaders: RequestConfigures, commonHeaders: RequestConfigures) {
-  // eslint-disable-next-line no-sequences
-  const currentHeadersMap = currentHeaders.reduce((map, cur) => (map[cur.key] = cur, map), {} as Record<string, RequestConfigure>)
-
-  const headers: RequestConfigures = [...currentHeaders]
-
-  if (commonHeaders.length === 0) {
-    return headers
-  }
-
-  if (currentHeaders.length === 0) {
-    headers.push(...commonHeaders)
-  } else {
-    commonHeaders.forEach((h) => {
-      // Attach public, but do not enable.
-      if (!currentHeadersMap[h.key]) {
-        headers.push({
-          ...h,
-          enable: false,
-        })
-      }
-    })
-  }
-
-  return headers
-}
-
-provide('requestDetails', requestDetails)
-
 onMounted(async () => {
   // get basic config
   const currentRequest = await getCurrentRequest()
 
-  // merge current headers and common headers
-  currentRequest.headers = updateRequestHeaders(
-    currentRequest.headers ?? [],
-    // Non-enabled public headers are not added to the list.
-    (await getLocaleHeaders()).filter(h => h.enable),
-  )
+  // The default headers are applied only if the headers have not been set.
+  if (!currentRequest.headers?.length) {
+    currentRequest.headers = (await getLocaleHeaders()).filter(h => h.enable)
+  }
 
   requestDetails.value = currentRequest
 })

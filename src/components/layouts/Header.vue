@@ -3,6 +3,8 @@ import Menus from './Menus.vue'
 // import Profiler from './Profiler.vue'
 import Document from './Document.vue'
 import ToggleMode from './ToggleMode.vue'
+import CleanCache from './CleanCache.vue'
+
 import { buttonVariants } from '@/components/ui/button/index.ts'
 </script>
 
@@ -15,6 +17,8 @@ import { buttonVariants } from '@/components/ui/button/index.ts'
 
     <div class="space-x-1.5">
       <ToggleMode />
+
+      <CleanCache />
 
       <Document />
 

@@ -9,6 +9,6 @@ const toggleDark = useToggle(isDark)
 
 <template>
   <Button variant="ghost" size="icon" @click="toggleDark()">
-    <i class="block pointer-events-none text-lg" :class="isDark ? 'i-solar-moon-bold' : 'i-solar-sun-bold'" />
+    <i class="text-lg" :class="isDark ? 'i-solar-moon-bold' : 'i-solar-sun-bold'" />
   </Button>
 </template>

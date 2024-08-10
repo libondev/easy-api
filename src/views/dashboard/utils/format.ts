@@ -1,6 +1,6 @@
 import { stringify } from 'qs'
 import { set } from 'es-toolkit/compat'
-import type { RequestConfigures, RequestDetails } from '@/types/request'
+import type { RequestConfigures, RequestDetails } from '@/types/request.ts'
 
 export function formatRequestAddress(url: string) {
   if (!url) {
@@ -10,29 +10,40 @@ export function formatRequestAddress(url: string) {
   return url.replace(/#\{.*?value:(.*?)\}/g, '$1')
 }
 
-export function formatRequestOptions(headers?: RequestConfigures) {
-  if (!headers || !headers.length) {
+export function formatRequestOptions(data?: RequestConfigures) {
+  if (!data || !data.length) {
     return
   }
 
-  return headers.reduce((map, { enable, key, value, dataType = 'string' }) => {
-    if (enable) {
-      if (dataType !== 'string') {
-        try {
-          value = JSON.parse(value)
-        } catch {}
-      }
-
-      // map[key] = value
-      set(map, key, value)
+  return data.reduce((map, { enable, key, value, dataType = 'string' }) => {
+    if (!enable) {
+      return map
     }
+
+    if (dataType !== 'string') {
+      try {
+        value = JSON.parse(value)
+      } catch {}
+    }
+
+    set(map, key, value)
 
     return map
   }, {} as Record<string, string>)
 }
 
-export function formatRequestBody(body?: any, type: RequestDetails['bodyType'] = 'Text') {
+export function formatRequestBody(
+  body: any,
+  method: RequestDetails['method'] = 'GET',
+  type: RequestDetails['bodyType'] = 'Text',
+) {
   if (!body) {
+    return
+  }
+
+  if (['GET', 'HEAD'].includes(method)) {
+    useToast('Request with GET/HEAD method cannot have body, has been ignored.')
+
     return
   }
 
@@ -43,12 +54,27 @@ export function formatRequestBody(body?: any, type: RequestDetails['bodyType'] =
     case 'JSON':
       return formatRequestOptions(body)
 
-    case 'FormUrlencoded':
-      return null
+    // e.g. Blob/File
+    case 'FormData':
+      return transformToFormData(body)
 
     default:
       return null
   }
+}
+
+export function transformToFormData(data?: RequestConfigures) {
+  const formData = new FormData()
+
+  if (!data || !data.length) {
+    return formData
+  }
+
+  data.forEach((item) => {
+    formData.append(item.key, item.value)
+  })
+
+  return formData
 }
 
 export function transformToQueryString(queries?: Record<string, any>) {

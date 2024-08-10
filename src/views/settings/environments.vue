@@ -1,96 +1,55 @@
 <route>
   meta:
-    title: Environments
+    title: Variables
+    description: Save state values as atomized states for easy reuse.
 </route>
 
 <script lang="ts" setup>
-import { h } from 'vue'
-import { debounce } from 'es-toolkit'
+import {
+  getEnableColumn,
+  getOperateColumn,
+  getPrimaryKeyColumn,
+  getRowValueColumn,
+  onCreateClick,
+  onRemoveClick,
+} from '../dashboard/utils/columns.ts'
 
-import type { RequestEnvironments } from '@/types/request'
-import { getLocaleEnvironments, setLocaleEnvironments } from '@/constants/request'
+import type { RequestConfigures } from '@/types/request.ts'
+import { getLocaleVariables, setLocaleVariables } from '@/constants/request.ts'
 
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
+const environments = ref<RequestConfigures>([])
 
-import type { ITableColumn } from '@/components/ui/table'
-
-const environments = ref<RequestEnvironments>([])
-
-const onUpdateEnvs = debounce(() => {
-  setLocaleEnvironments(environments.value.filter(({ key }) => key).map(toRaw))
-}, 600)
-
-const tableColumns: ITableColumn[] = [
-  {
-    title: 'Key',
-    field: 'key',
-    renderCell: ({ row }) => h(Input, {
-      'name': Math.random(),
-      'modelValue': row.key,
-      'onUpdate:modelValue': (value) => {
-        row.key = value
-        onUpdateEnvs()
-      },
-    }),
-  },
-  {
-    title: 'Value',
-    field: 'value',
-    renderCell: ({ row }) => h(Input, {
-      'name': Math.random(),
-      'modelValue': row.value,
-      'onUpdate:modelValue': (value) => {
-        row.value = value
-        onUpdateEnvs()
-      },
-    }),
-  },
-  {
-    title: '',
-    field: 'operate',
-    width: 50,
-    headClass: 'text-center',
-    cellClass: 'text-center',
-    renderHead: () => h(Button, {
-      variant: 'outline',
-      class: 'size-7 p-1',
-      onClick: onCreateClick,
-    }, () => [h('i', { class: 'i-ph-plus-bold' })]),
-    renderCell: ({ idx }) => h(Button, {
-      variant: 'destructive',
-      class: 'size-7 p-1',
-      onClick: () => {
-        environments.value.splice(idx, 1)
-        onUpdateEnvs()
-      },
-    }, () => [h('i', { class: 'i-carbon-trash-can' })]),
-  },
+const tableColumns = [
+  getPrimaryKeyColumn(),
+  getRowValueColumn(),
+  getEnableColumn('switch'),
+  getOperateColumn(
+    onCreateClick(environments),
+    onRemoveClick(environments),
+  ),
 ]
 
-function onCreateClick() {
-  environments.value.unshift({
-    value: '',
-    key: '',
-  })
+onMounted(async () => {
+  environments.value = await getLocaleVariables()
+})
 
-  onUpdateEnvs()
-}
-
-onMounted(() => {
-  getLocaleEnvironments().then((data) => {
-    environments.value = data
-  })
+onBeforeUnmount(() => {
+  setLocaleVariables(environments.value.filter(({ key }) => key).map(toRaw))
 })
 </script>
 
 <template>
   <h3 class="text-xl font-medium">
-    RequestEnvironments
+    {{ $route.meta.title }}
   </h3>
   <p class="mb-4">
-    Save state values as atomized states for easy reuse
+    {{ $route.meta.description }}
   </p>
 
-  <Table :data="environments" :columns="tableColumns" :filterable="false" height="420px" />
+  <Table
+    height="420px"
+    :filterable="false"
+    :data="environments"
+    :columns="tableColumns"
+  />
 </template>

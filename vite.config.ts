@@ -22,12 +22,8 @@ export default defineConfig(({ mode }) => ({
           if (!id.includes('node_modules'))
             return 'chunk'
 
-          if (id.includes('vue') || id.includes('pinia'))
-            return 'vue-vendors'
-
-          if (id.includes('codemirror')) {
-            return 'codemirror'
-          }
+          if (id.includes('vue'))
+            return 'vue'
 
           return 'vendors'
         },
@@ -49,7 +45,6 @@ export default defineConfig(({ mode }) => ({
     exclude: ['vue-demi'],
     include: [
       'vue',
-      'pinia',
       'vue-router',
       'class-variance-authority',
       'radix-vue',

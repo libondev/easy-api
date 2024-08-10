@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { createMentions } from 'mentions.js'
 
-import { getLocaleEnvironments } from '@/constants/request'
-import type { RequestEnvironments } from '@/types/request'
+import { getLocaleVariables } from '@/constants/request.ts'
+import type { RequestConfigures } from '@/types/request.ts'
 
 const emits = defineEmits<{
   (e: 'submit'): void
@@ -21,7 +21,7 @@ function onKeydownEnter(event: KeyboardEvent) {
 
 let mentionsRef: ReturnType<typeof createMentions>
 
-function initMentions(environmentList: RequestEnvironments) {
+function initMentions(environmentList: RequestConfigures) {
   if (mentionsRef)
     return
 
@@ -57,7 +57,7 @@ function destroyMentions() {
   mentionsRef!.destroy()
 }
 
-getLocaleEnvironments().then(initMentions)
+getLocaleVariables().then(initMentions)
 
 const unwatch = watch(modelValue, (nv) => {
   // The first load may not get the cache yet

@@ -28,7 +28,7 @@ export const SETTINGS_MENUS = [
   //   link: '/settings/sessions',
   // },
   {
-    label: 'Environments',
+    label: 'Variables',
     icon: 'i-carbon-ibm-z-environments-dev-sec-ops',
     link: '/settings/environments',
   },
