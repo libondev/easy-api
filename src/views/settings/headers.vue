@@ -21,11 +21,11 @@ const headers = ref<RequestConfigures>([])
 const tableColumns = [
   getPrimaryKeyColumn(),
   getRowValueColumn(),
-  getEnableColumn('switch'),
-  getOperateColumn(
-    onCreateClick(headers, () => ({ id: `${Date.now()}` })),
-    onRemoveClick(headers),
-  ),
+  getEnableColumn(headers, 'switch'),
+  getOperateColumn({
+    onCreate: onCreateClick(headers, () => ({ id: `${Date.now()}` })),
+    onRemove: onRemoveClick(headers),
+  }),
 ]
 
 onMounted(async () => {

@@ -22,11 +22,11 @@ const environments = ref<RequestConfigures>([])
 const tableColumns = [
   getPrimaryKeyColumn(),
   getRowValueColumn(),
-  getEnableColumn('switch'),
-  getOperateColumn(
-    onCreateClick(environments),
-    onRemoveClick(environments),
-  ),
+  getEnableColumn(environments, 'switch'),
+  getOperateColumn({
+    onCreate: onCreateClick(environments),
+    onRemove: onRemoveClick(environments),
+  }),
 ]
 
 onMounted(async () => {

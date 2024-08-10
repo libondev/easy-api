@@ -13,7 +13,7 @@ import {
 const defaultConfigs = inject(DEFAULT_REQUEST_CONFIG_INJECTION_KEY)!
 
 const previewFetchOptionsCode = computed(() => {
-  let code = 'fetch(\'...\', {\n  ...,\n'
+  let code = 'fetch(\'...\', {\n'
 
   const config = defaultConfigs.value
   for (const key in config) {
@@ -110,17 +110,16 @@ function onUpdatePreferences() {
   left: 0;
   width: 100%;
   opacity: .6;
+  height: 1.5em;
   background: hsl(var(--input));
   pointer-events: none;
 }
 
 .code-block::before {
   top: 0;
-  height: 2.9em;
 }
 
 .code-block::after {
   bottom: 0;
-  height: 1.5em;
 }
 </style>

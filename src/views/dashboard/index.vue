@@ -111,7 +111,6 @@ function onSendRequest() {
     })
     .finally(() => {
       requestPending.value = false
-      setCurrentRequest(requestDetails.value)
     })
 }
 
@@ -119,6 +118,21 @@ function onCancelRequest() {
   _abortController?.abort()
   requestPending.value = false
 }
+
+let _autoSaveTimer: number
+watch(() => requestDetails.value, (newVal, oldVal, onClear) => {
+  // initial
+  if (!oldVal?.url) {
+    return
+  }
+
+  onClear(() => {
+    clearTimeout(_autoSaveTimer)
+    _autoSaveTimer = 0
+  })
+
+  _autoSaveTimer = window.setTimeout(setCurrentRequest, 2000, newVal)
+}, { deep: true, flush: 'post' })
 
 onMounted(async () => {
   // get basic config
@@ -133,8 +147,12 @@ onMounted(async () => {
 })
 
 onBeforeUnmount(() => {
-  setCurrentRequest(requestDetails.value)
   onCancelRequest()
+
+  // You don't need to save it again if "watch effect" is still executing.
+  if (!_autoSaveTimer) {
+    setCurrentRequest(requestDetails.value)
+  }
 })
 </script>
 

@@ -30,6 +30,6 @@ export const SETTINGS_MENUS = [
   {
     label: 'Variables',
     icon: 'i-carbon-ibm-z-environments-dev-sec-ops',
-    link: '/settings/environments',
+    link: '/settings/variables',
   },
 ]

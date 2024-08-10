@@ -17,7 +17,7 @@ import { Button } from '@/components/ui/button/index.ts'
 import { getLocaleHeaders } from '@/constants/request.ts'
 
 import type { ITableColumn } from '@/components/ui/table/index.ts'
-import type { RequestConfigures } from '@/types/request.ts'
+import type { RequestConfigure, RequestConfigures } from '@/types/request.ts'
 
 defineOptions({
   inheritAttrs: false,
@@ -47,7 +47,8 @@ function onCreateClick() {
     key: '',
     value: '',
     enable: true,
-  })
+    isCustom: true,
+  } as RequestConfigure)
 }
 
 function onRemoveClick(idx: number) {
