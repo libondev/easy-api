@@ -112,7 +112,7 @@ function onManualSwitching() {
     <RadioGroup
       v-model="requestDetails.bodyType"
       :default-value="BODY_TYPE[0]"
-      class="flex-col pt-4 w-24 min-w-24"
+      class="flex-col pt-4 w-24 min-w-24 select-none"
       @update:model-value="onManualSwitching"
     >
       <div v-for="type of BODY_TYPE" :key="type" class="flex items-center gap-x-1">
