@@ -20,13 +20,15 @@ export function formatRequestOptions(data?: RequestConfigures) {
       return map
     }
 
-    if (dataType !== 'string') {
-      try {
-        value = JSON.parse(value)
-      } catch {}
-    }
+    if (key) {
+      if (dataType !== 'string') {
+        try {
+          value = JSON.parse(value)
+        } catch { }
+      }
 
-    set(map, key, value)
+      set(map, key, value)
+    }
 
     return map
   }, {} as Record<string, string>)
@@ -71,7 +73,9 @@ export function transformToFormData(data?: RequestConfigures) {
   }
 
   data.forEach((item) => {
-    formData.append(item.key, item.value)
+    if (item.key) {
+      formData.append(item.key, item.value)
+    }
   })
 
   return formData

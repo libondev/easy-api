@@ -1,5 +1,4 @@
-<script lang="ts" setup>
-import { h } from 'vue'
+<script lang="tsx" setup>
 import {
   getDataTypeColumn,
   getEnableColumn,
@@ -10,7 +9,7 @@ import {
   onCreateClick,
   onRemoveClick,
 } from '../utils/columns.ts'
-import { Table } from '@/components/ui/table'
+import { Table } from '@/components/ui/table/index.ts'
 
 import type { RequestDetails } from '@/types/request.ts'
 
@@ -30,32 +29,29 @@ const tableColumns = [
 ]
 
 const componentRenderer = computed(() => {
-  const { bodyType = 'Text' } = requestDetails.value
+  const { bodyType = 'Text', body } = requestDetails.value
 
   if (['JSON', 'FormData'].includes(bodyType)) {
-    return h(Table, {
-      index: false,
-      filterable: false,
-      data: requestDetails.value.body,
-      columns: [
-        getEnableColumn(requestDetails.value.body),
-        ...tableColumns,
-        getOperateColumn(
-          onCreateClick(requestDetails.value.body),
-          onRemoveClick(requestDetails.value.body),
-        ),
-      ],
-    })
+    const _columns = [
+      getEnableColumn(body),
+      ...tableColumns,
+      getOperateColumn({
+        onCreate: onCreateClick(body),
+        onRemove: onRemoveClick(body),
+      }),
+    ]
+
+    return <Table index={false} filterable={false} data={body} columns={_columns} />
   }
 
-  return h('textarea', {
-    value: requestDetails.value.body,
-    name: 'request-body',
-    class: 'flex min-h-[60px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 ring-offset-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50',
-    onInput: (ev: InputEvent) => {
-      requestDetails.value.body = (ev.target as HTMLTextAreaElement).value
-    },
-  })
+  return (
+    <textarea
+      value={body}
+      name="request-body"
+      class="flex min-h-[60px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 ring-offset-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+      onInput={onInputBodyText}
+    />
+  )
 })
 
 // Allow rollback to the last data
@@ -100,6 +96,10 @@ watch(() => requestDetails.value.bodyType, (newType = 'Text', oldType) => {
     requestDetails.value.body = ''
   }
 })
+
+function onInputBodyText(ev: InputEvent) {
+  requestDetails.value.body = (ev.target as HTMLTextAreaElement).value
+}
 
 // manual switching "bodyType"
 function onManualSwitching() {

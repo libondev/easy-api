@@ -6,7 +6,7 @@ const props = defineProps<{
 }>()
 const emits = defineEmits(['filter'])
 
-const propertyOptions = props.columns.map(column => ({
+const propertyOptions = props.columns.filter(item => item.title).map(column => ({
   label: column.title,
   value: column.field,
 }))
@@ -106,7 +106,7 @@ function onRemoveCondition(conditionIndex: number) {
 <template>
   <Popover @update:open="onFilterPopoverOpen">
     <PopoverTrigger as-child>
-      <Button variant="outline" class="px-2">
+      <Button variant="outline" class="size-7 p-1">
         <i class="i-solar-filter-linear" />
       </Button>
     </PopoverTrigger>

@@ -80,7 +80,7 @@ function onCopyClick() {
       </li>
     </ul>
 
-    <div class="relative p-2 group w-full h-full">
+    <div class="relative p-4 group w-full h-full">
       <Button v-show="result.text" class="absolute right-2 top-2 opacity-0 transition-opacity group-hover:opacity-100" @click="onCopyClick">
         Copy
       </Button>

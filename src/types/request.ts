@@ -20,6 +20,6 @@ export interface RequestConfigure {
   key: string
   value: string
   enable: boolean
-  dataType?: 'string' | 'object' | 'array' | 'number' | 'boolean'
+  dataType?: 'string' | 'object' | 'array' | 'number' | 'boolean' | 'file'
 }
 export type RequestConfigures = RequestConfigure[]

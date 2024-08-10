@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import Header from '@/components/layouts/Header.vue'
-import { Toaster } from '@/components/ui/toast'
+import { Toaster } from '@/components/ui/toast/index.ts'
 import {
   DEFAULT_REQUEST_CONFIG_INJECTION_KEY,
   getLocaleDefaultConfigs,

@@ -10,7 +10,9 @@ import {
   onCreateClick,
   onRemoveClick,
 } from '../utils/columns.ts'
+
 import Params from './Params.vue'
+import Headers from './Headers.vue'
 import {
   DASHBOARD_TABS_CHECKED_DEFAULT_VALUE,
   DASHBOARD_TABS_CHECKED_KEY,
@@ -26,31 +28,15 @@ const checkedTabs = useStorage<string>(
   DASHBOARD_TABS_CHECKED_DEFAULT_VALUE,
 )
 
-function setRowReadonly(row: any) {
-  return {
-    readonly: !row.isCustom,
-  }
-}
-
-const headerTableColumns = [
-  getEnableColumn(requestHeaders),
-  getPrimaryKeyColumn(setRowReadonly),
-  getRowValueColumn(setRowReadonly),
-  getOperateColumn(
-    onCreateClick(requestHeaders, () => ({ isCustom: true })),
-    onRemoveClick(requestHeaders),
-  ),
-]
-
 const queriesTableColumns = [
   getEnableColumn(requestQueries),
   getPrimaryKeyColumn(),
   getDataTypeColumn(normalDataTypes),
   getRowValueColumn(),
-  getOperateColumn(
-    onCreateClick(requestQueries),
-    onRemoveClick(requestQueries),
-  ),
+  getOperateColumn({
+    onCreate: onCreateClick(requestQueries),
+    onRemove: onRemoveClick(requestQueries),
+  }),
 ]
 </script>
 
@@ -63,18 +49,18 @@ const queriesTableColumns = [
       <TabsTrigger class="flex-1" value="query">
         Query
       </TabsTrigger>
-      <TabsTrigger class="flex-1" value="params">
-        Params
+      <TabsTrigger class="flex-1" value="body">
+        Body
       </TabsTrigger>
     </TabsList>
 
     <TabsContent value="header">
-      <Table :index="false" :filterable="false" :data="requestHeaders" :columns="headerTableColumns" />
+      <Headers v-model="requestHeaders" />
     </TabsContent>
     <TabsContent value="query">
       <Table :index="false" :filterable="false" :data="requestQueries" :columns="queriesTableColumns" />
     </TabsContent>
-    <TabsContent value="params">
+    <TabsContent value="body">
       <Params />
     </TabsContent>
   </Tabs>

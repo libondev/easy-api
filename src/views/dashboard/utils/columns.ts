@@ -1,13 +1,13 @@
 import type { Ref } from 'vue'
 import { h } from 'vue'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Switch } from '@/components/ui/switch'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Input } from '@/components/ui/input/index.ts'
+import { Button } from '@/components/ui/button/index.ts'
+import { Switch } from '@/components/ui/switch/index.ts'
+import { Checkbox } from '@/components/ui/checkbox/index.ts'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select/index.ts'
 
 import type { RequestConfigures } from '@/types/request.ts'
-import type { ITableColumn } from '@/components/ui/table'
+import type { ITableColumn } from '@/components/ui/table/index.ts'
 
 export const normalDataTypes = [
   'string',
@@ -122,10 +122,13 @@ export function getRowValueColumn(
   }
 }
 
-export function getOperateColumn(
-  onCreate: () => void,
-  onRemove: (idx: number) => void,
-): ITableColumn {
+export function getOperateColumn({
+  onCreate,
+  onRemove,
+}: {
+  onCreate: () => void
+  onRemove: (idx: number) => void
+}): ITableColumn {
   return {
     title: '',
     field: 'operate',

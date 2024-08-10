@@ -7,8 +7,8 @@ import {
 } from '@internationalized/date'
 
 import { CalendarIcon } from '@radix-icons/vue'
-import { Calendar } from '@/components/ui/calendar'
-import { Button } from '@/components/ui/button'
+import { Calendar } from '@/components/ui/calendar/index.ts'
+import { Button } from '@/components/ui/button/index.ts'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { cn } from '@/utils/cls.ts'
 

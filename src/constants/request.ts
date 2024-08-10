@@ -1,7 +1,7 @@
 // import type { InjectionKey } from 'vue'
 import localforage from 'localforage'
 import { cloneDeep } from 'es-toolkit/compat'
-import type { RequestConfigures, RequestDetails } from '@/types/request.ts'
+import type { RequestConfigure, RequestConfigures, RequestDetails } from '@/types/request.ts'
 
 export const REQUEST_METHODS = [
   'GET',
@@ -60,7 +60,17 @@ export function getCurrentRequest() {
 }
 
 export function setCurrentRequest(request: RequestDetails) {
-  localforage.setItem(LOCALE_CACHE_KEYS.CURRENT_REQUEST, cloneDeep(request))
+  const clonedRequest = cloneDeep(request)
+
+  if (['JSON', 'FormData'].includes(clonedRequest.bodyType!)) {
+    clonedRequest.body.forEach((item: RequestConfigure) => {
+      if (item.dataType === 'file') {
+        item.value = ''
+      }
+    })
+  }
+
+  localforage.setItem(LOCALE_CACHE_KEYS.CURRENT_REQUEST, clonedRequest)
 }
 
 export function getLocaleHeaders() {

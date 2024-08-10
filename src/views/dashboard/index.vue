@@ -72,8 +72,6 @@ function onSendRequest() {
     return
   }
 
-  setCurrentRequest(requestDetails.value)
-
   requestPending.value = true
   _abortController = new AbortController()
 
@@ -113,6 +111,7 @@ function onSendRequest() {
     })
     .finally(() => {
       requestPending.value = false
+      setCurrentRequest(requestDetails.value)
     })
 }
 
