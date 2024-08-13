@@ -2,7 +2,7 @@
 import { type HTMLAttributes, computed } from 'vue'
 import { AlertDialogCancel, type AlertDialogCancelProps } from 'radix-vue'
 import { cn } from '@/utils/cls.ts'
-import { buttonVariants } from '@/components/ui/button/index.ts'
+import { buttonVariants } from '@/components/ui/button'
 
 const props = defineProps<AlertDialogCancelProps & { class?: HTMLAttributes['class'] }>()
 
