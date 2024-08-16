@@ -5,7 +5,7 @@
 
 <!-- eslint-disable regexp/no-trivially-nested-quantifier -->
 <script lang="ts" setup>
-import { parse } from 'qs'
+import qs from 'query-string'
 import { useRouter } from 'vue-router'
 import { setCurrentRequest } from '@/constants/request.ts'
 import type { RequestConfigure, RequestConfigures } from '@/types/request.ts'
@@ -49,7 +49,7 @@ function onParseRequest() {
     return list
   }, [] as RequestConfigures)
 
-  const queries = Object.entries(queryString ? parse(queryString) : {}).reduce((list, [key, value]) => {
+  const queries = Object.entries(queryString ? qs.parse(queryString) : {}).reduce((list, [key, value]) => {
     list.push({
       key,
       value: value as string,

@@ -1,4 +1,4 @@
-import { stringify } from 'qs'
+import qs from 'query-string'
 import { set } from 'es-toolkit/compat'
 import type { RequestConfigures, RequestDetails } from '@/types/request.ts'
 
@@ -86,7 +86,7 @@ export function transformToQueryString(queries?: Record<string, any>) {
     return ''
   }
 
-  const queryString = stringify(queries)
+  const queryString = qs.stringify(queries)
 
   if (queryString) {
     return `?${queryString}`
