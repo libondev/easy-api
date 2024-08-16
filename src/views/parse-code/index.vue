@@ -19,6 +19,10 @@ const parseFetchStringRegex = /fetch\("([^"]+)"\s*,\s*(\{(?:[^{}]|\{(?:[^{}]|\{[
 const router = useRouter()
 
 function onParseRequest() {
+  if (!requestString.value) {
+    return
+  }
+
   const matchedResult = requestString.value.match(parseFetchStringRegex)
 
   if (!matchedResult) {
