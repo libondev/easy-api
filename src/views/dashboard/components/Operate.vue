@@ -20,10 +20,6 @@ function onSendClick() {
 function onCancelClick() {
   emits('cancel')
 }
-
-function onShareClick() {
-  emits('share')
-}
 </script>
 
 <template>
@@ -63,15 +59,6 @@ function onShareClick() {
       @click="onSendClick"
     >
       Send
-    </Button>
-
-    <Button
-      class="px-3"
-      variant="outline"
-      title="Generate links to share with others"
-      @click="onShareClick"
-    >
-      Share
     </Button>
   </div>
 </template>

@@ -15,7 +15,7 @@ import { SETTINGS_MENUS } from '@/constants/layout.ts'
 
     <div class="flex flex-col pt-6 space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
       <aside class="lg:w-1/5">
-        <nav class="flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1 overflow-auto">
+        <nav class="w-full flex gap-x-2 lg:flex-col lg:gap-x-0 lg:gap-y-1">
           <RouterLink
             v-for="menu of SETTINGS_MENUS"
             :key="menu.link"

@@ -83,9 +83,9 @@ function onUpdatePreferences() {
     <div data-orientation="horizontal" role="separator" class="bg-border relative h-px w-full" />
 
     <ul class="space-y-8">
-      <li v-for="item of formItems" :key="item.field" class="space-y-2">
-        <Label class="capitalize">{{ item.field }}</Label>
-        <Select v-model="defaultConfigs[item.field]" name="form items" @update:model-value="onUpdatePreferences">
+      <li v-for="item, idx of formItems" :key="item.field" class="space-y-2">
+        <Label :for="`field-${idx}`" class="capitalize">{{ item.field }}</Label>
+        <Select :id="`field-${idx}`" v-model="defaultConfigs[item.field]" name="form items" @update:model-value="onUpdatePreferences">
           <SelectTrigger aria-label="Select profile" class="w-full">
             <SelectValue placeholder="Select an profile" />
           </SelectTrigger>

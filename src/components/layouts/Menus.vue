@@ -25,13 +25,13 @@ const menus = [
     <MenubarMenu v-for="menu of menus" :key="menu.label">
       <template v-if="menu.children?.length">
         <MenubarTrigger class="flex items-center">
-          <i :class="menu.icon" class="mr-1" />
-          {{ menu.label }}
+          <i :class="menu.icon" />
+          <span class="ml-1 hidden md:inline-block">{{ menu.label }}</span>
         </MenubarTrigger>
         <MenubarContent>
           <MenubarItem v-for="item of menu.children" :key="item.label" as-child>
             <RouterLink :to="item.link" class="flex justify-between">
-              <span>{{ item.label }}</span>
+              {{ item.label }}
 
               <i v-if="item.icon" class="size-4" :class="item.icon" />
             </RouterLink>
@@ -43,8 +43,8 @@ const menus = [
         :to="menu.link!"
         class="py-1 px-3 rounded-sm inline-flex items-center select-none text-sm font-medium cursor-default hover:bg-accent hover:text-accent-foreground"
       >
-        <i :class="menu.icon" class="mr-1" />
-        {{ menu.label }}
+        <i :class="menu.icon" />
+        <span class="ml-1 hidden md:inline-block">{{ menu.label }}</span>
       </RouterLink>
     </MenubarMenu>
   </Menubar>
