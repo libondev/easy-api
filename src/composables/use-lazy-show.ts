@@ -1,5 +1,4 @@
-import type { Ref } from 'vue'
-import { shallowRef } from 'vue'
+import { type Ref, shallowRef } from 'vue'
 
 interface Options {
   /**
