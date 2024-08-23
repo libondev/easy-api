@@ -23,7 +23,6 @@ defineOptions({
   inheritAttrs: false,
 })
 
-const configHeaders = ref<RequestConfigures>([])
 const requestHeaders = defineModel<RequestConfigures>({ default: [] })
 
 const getRowReadonly = (row: any) => ({ readonly: !row.isCustom })
@@ -32,30 +31,32 @@ const headerTableColumns = [
   getEnableColumn(requestHeaders),
   getPrimaryKeyColumn(getRowReadonly),
   getRowValueColumn(getRowReadonly),
-  getOperateColumn(),
+  getOperateColumn(requestHeaders.value),
 ]
 
-const configHeadersTableColumns = [
+// selectable headers
+const configHeaders = ref<RequestConfigures>([])
+const selectableHeadersTableColumns = [
   getEnableColumn(configHeaders),
   getPrimaryKeyColumn(getRowReadonly),
   getRowValueColumn(getRowReadonly),
 ]
 
-function onCreateClick() {
-  requestHeaders.value.push({
-    id: `${Date.now()}`,
-    key: '',
-    value: '',
-    enable: true,
-    isCustom: true,
-  } as RequestConfigure)
-}
-
 function onRemoveClick(idx: number) {
   requestHeaders.value.splice(idx, 1)
 }
 
-function getOperateColumn(): ITableColumn {
+function getOperateColumn(dataList: RequestConfigures): ITableColumn {
+  const onCreateClick = () => {
+    dataList.push({
+      id: `${Date.now()}`,
+      key: '',
+      value: '',
+      enable: true,
+      isCustom: true,
+    } as RequestConfigure)
+  }
+
   return {
     title: '',
     field: 'operate',
@@ -95,10 +96,8 @@ function onConfirmClick() {
 }
 
 onMounted(async () => {
-  configHeaders.value = (await getLocaleHeaders()).map((item) => {
-    item.enable = false
-    return item
-  })
+  configHeaders.value = (await getLocaleHeaders())
+    .map(item => ({ ...item, enable: false }))
 })
 </script>
 
@@ -115,7 +114,7 @@ onMounted(async () => {
       </DialogHeader>
 
       <div>
-        <Table :index="false" :filterable="false" :data="configHeaders" :columns="configHeadersTableColumns" />
+        <Table :index="false" :filterable="false" :data="configHeaders" :columns="selectableHeadersTableColumns" />
       </div>
 
       <DialogFooter>
